@@ -1,12 +1,10 @@
 class UserNotifier < ApplicationMailer
 
-  #FIXME_AB:  use constants
-  default from: 'Harsh Agrawal <harsh@vinsol.com>'
+  default from: CONSTANTS["default_email_from"]
 
-  #FIXME_AB: rename this function 
-  def registration_confirmation(user)
+  def verification_mail(user)
     @user = user
-    mail to: user.email, subject: 'Registration Confirmation'
+    mail to: user.email, subject: 'Welcome to Groupon, please verify your email to continue'
   end
 
 end

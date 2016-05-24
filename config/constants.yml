@@ -1,0 +1,8 @@
+development:
+  default_email_from: harsh@vinsol.com
+
+test:
+  default_email_from: xyz@vinsol.com
+
+production:
+  default_email_from: abc@vinsol.com

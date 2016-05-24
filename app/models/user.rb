@@ -1,15 +1,20 @@
 class User < ActiveRecord::Base
-  #FIXME_AB: read about this
   has_secure_password
   
   validates :name, presence: true, length: { maximum: 50 }
-  #FIXME_AB: uniqueness is case sensitive. akhil@vinsol.com Akhil@VINSOL.com should be same. check uniqueness options
-  validates :email, presence: true, uniqueness: true, format: { with: REGEXP[:email], 
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: REGEXP[:email], 
     message: "Invalid Format"}
   validates :password, length: { minimum: 6 }
   
 
-  before_create :generate_verification_token
+  before_create :set_and_generate_verification_token
+  after_commit :send_verification_mail, on: :create
+
+  def verify!
+    self.verified_at = Time.current
+    self.verification_token = nil
+    save!
+  end
 
   private
 
@@ -17,6 +22,20 @@ class User < ActiveRecord::Base
       SecureRandom.urlsafe_base64.to_s
     end
     
+    def set_and_generate_verification_token
+      generate_verification_token
+      set_verification_token_expiry
+    end
+
+    def set_verification_token_expiry
+      # move TTV to constants.yml
+      self.verification_token_expire_at = Time.current + 6.hours
+    end
+
+    def send_verification_mail
+      UserNotifier.verification_mail(self).deliver
+    end
+
     def generate_verification_token
       loop do 
         verification_token = random_token
@@ -27,10 +46,4 @@ class User < ActiveRecord::Base
       end
     end
 
-    #FIXME_AB: This is a private method, you can not call from controller
-    def verify!
-      self.verified_at = Time.current
-      self.verification_token = nil
-      save!(:validate => false)
-    end
 end

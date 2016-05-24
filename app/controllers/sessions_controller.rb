@@ -4,8 +4,8 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:email])
-    #FIXME_AB: Prefer && instead of and
-    if user and user.authenticate(params[:password])
+    if user && user.authenticate(params[:password])
+      #FIXME_AB: extract this in a private method "sign_in(user)"
       session[:user_id] = user.id
       redirect_to root_url
     else
@@ -15,7 +15,6 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    #FIXME_AB: store_url?
-    redirect_to store_url, notice: "Logged out"
+    redirect_to root_url, notice: "Logged out"
   end
 end

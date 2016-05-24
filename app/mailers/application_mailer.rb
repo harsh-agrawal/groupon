@@ -1,5 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  #FIXME_AB: Do as discussed. config/constants.ymlo
-  default from: "from@example.com"
+  default from: CONSTANTS["default_email_from"]
   layout 'mailer'
 end

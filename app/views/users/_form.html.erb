@@ -1,17 +1,5 @@
 <%= form_for @user, :html=> { class: 'form-horizontal' } do |f| %>
-<% #FIXME_AB: Move this to views/shared/_errors.html.erb so it can be reused -%>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %>
-        prohibited this user from being saved:</h2>
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <%= render partial: "shared/errors", locals: { object: @user} %>
   <fieldset>
   <legend>Enter User Details</legend>
 

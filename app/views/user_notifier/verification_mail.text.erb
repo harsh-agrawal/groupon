@@ -3,4 +3,3 @@ Hi <%= @user.name %>,
 Thanks for registering! To confirm your registration click the URL below.
 
 <%= link_to account_activation_url(@user.verification_token), account_activation_url(@user.verification_token) %>
-

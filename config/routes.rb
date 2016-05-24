@@ -12,8 +12,7 @@ Rails.application.routes.draw do
 
   get "/signup", to: 'users#new'
   
-  #FIXME_AB: add only what is needed
-  resources :users
+  resource :users, only: [:create]
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
