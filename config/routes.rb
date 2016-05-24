@@ -1,10 +1,20 @@
 Rails.application.routes.draw do
+
+  get '/activation/:token', to: 'users#account_activation', as: 'account_activation'
+
+  resource :sessions, only: [:new, :create, :destroy]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  get "/signup", to: 'users#new'
+  
+  #FIXME_AB: add only what is needed
+  resources :users
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
