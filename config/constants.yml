@@ -1,0 +1,11 @@
+development:
+  default_email_from: harsh@vinsol.com
+  time_to_verify: 6
+
+test:
+  default_email_from: xyz@vinsol.com
+  time_to_verify: 6
+
+production:
+  default_email_from: abc@vinsol.com
+  time_to_verify: 6

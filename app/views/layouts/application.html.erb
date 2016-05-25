@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>Groupon</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -44,10 +44,19 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Link</a></li>
+        <% if current_user %>
+          <li><%= link_to 'Logout', sessions_path, method: :delete %></li>
+          <li><%= link_to 'SignUp', root_path %></li>
+          <% else %>
+          <li><%= link_to 'Login', new_sessions_path %></li>
+          <li><%= link_to 'SignUp', signup_path %></li>
+          <% end %>       
+        </li>
       </ul>
     </div>
   </div>
 </nav>
+<%= render partial: "shared/flash" %>
 <%= yield %>
 
 </body>
