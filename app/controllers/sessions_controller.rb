@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       redirect_to root_url
     else
-      redirect_to login_url, alert: "Invalid email/password combination"
+      redirect_to root_url, alert: "Invalid email/password combination"
     end
   end
 
