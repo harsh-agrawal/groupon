@@ -44,13 +44,14 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Link</a></li>
+        <% #FIXME_AB: signed_in? -%>
         <% if current_user %>
           <li><%= link_to 'Logout', sessions_path, method: :delete %></li>
           <li><%= link_to 'SignUp', root_path %></li>
-          <% else %>
+        <% else %>
           <li><%= link_to 'Login', new_sessions_path %></li>
           <li><%= link_to 'SignUp', signup_path %></li>
-          <% end %>       
+        <% end %>       
         </li>
       </ul>
     </div>

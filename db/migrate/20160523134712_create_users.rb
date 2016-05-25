@@ -13,6 +13,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :forgot_password_token, default: nil
       t.datetime :forgot_password_expire_at, default: nil
       t.timestamps null: false
+      #FIXME_AB: missing indexes and null constraints
     end
   end
 end

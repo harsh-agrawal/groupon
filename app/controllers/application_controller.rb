@@ -14,5 +14,17 @@ class ApplicationController < ActionController::Base
         nil
       end
     end
+
+    def signed_in?
+      !!current_user
+    end
     
 end
+
+#FIXME_AB: make a method authenticate which will redirect user to login page if user is not logged in
+#FIXME_AB: make another method ensure_anonymous which will redirect user to root page if user is logged in
+
+#FIXME_AB: login and signup should only come when user is not logged in
+#FIXME_AB: logout should come only when user is logged in
+#FIXME_AB: Basically add authorization
+#FIXME_AB: create user button should say signup

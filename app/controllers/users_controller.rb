@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+#FIXME_AB: logged in user should not be able to access signup form / create / activate
+
   def new
     @user = User.new
   end
@@ -16,6 +18,14 @@ class UsersController < ApplicationController
 
   def account_activation
     user = User.find_by_verification_token(params[:token])
+
+    #FIXME_AB: 
+    # if user && user.valid_verification_token? && user.verify!
+    #   successfully
+    # else
+    #   error
+    # end
+
     if user
       if user.verify!
         user.update_after_verification

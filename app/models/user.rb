@@ -10,10 +10,12 @@ class User < ActiveRecord::Base
   before_create :set_and_generate_verification_token
   after_commit :send_verification_mail, on: :create
 
+  #FIXME_AB: valid_verification_token?
   def verify!
     Time.current <= verification_token_expire_at
   end
 
+  #FIXME_AB: This is verify!
   def update_after_verification
     self.verified_at = Time.current
     self.verification_token = nil
@@ -33,7 +35,7 @@ class User < ActiveRecord::Base
   end
 
   def set_verification_token_expiry
-    self.verification_token_expire_at = Time.current + CONSTANTS["time_to_verify"].hours
+    self.verification_token_expire_at = (Time.current + CONSTANTS["time_to_verify"].hours)
   end
 
   def send_verification_mail
