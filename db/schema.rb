@@ -14,9 +14,10 @@
 ActiveRecord::Schema.define(version: 20160523134712) do
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",                         limit: 255
-    t.string   "email",                        limit: 255
-    t.string   "password_digest",              limit: 255
+    t.string   "first_name",                   limit: 255,                 null: false
+    t.string   "last_name",                    limit: 255,                 null: false
+    t.string   "email",                        limit: 255,                 null: false
+    t.string   "password_digest",              limit: 255,                 null: false
     t.boolean  "admin",                                    default: false
     t.string   "remember_token",               limit: 255
     t.string   "verification_token",           limit: 255
@@ -29,5 +30,8 @@ ActiveRecord::Schema.define(version: 20160523134712) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["forgot_password_token"], name: "index_users_on_forgot_password_token", using: :btree
+  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
+  add_index "users", ["verification_token"], name: "index_users_on_verification_token", using: :btree
 
 end

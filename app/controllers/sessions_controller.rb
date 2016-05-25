@@ -1,4 +1,7 @@
 class SessionsController < ApplicationController
+
+  before_action :ensure_anonymous, except: [:destroy]
+
   def new
   end
 
@@ -6,7 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
       #FIXME_AB: extract this in a private method "sign_in(user)"
-      session[:user_id] = user.id
+      sign_in(user)
       redirect_to root_url
     else
       redirect_to root_url, alert: "Invalid email/password combination"
@@ -17,4 +20,5 @@ class SessionsController < ApplicationController
     reset_session
     redirect_to root_url, notice: "Logged out"
   end
+
 end

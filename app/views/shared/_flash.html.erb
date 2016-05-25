@@ -2,3 +2,9 @@
 <% if flash[:alert] %>
   <p id="notice"> <%= flash[:alert] %> </p>
 <% end %>
+<% if flash[:errors] %>
+  <p id="notice"> <%= flash[:errors] %> </p>
+<% end %>
+<% if flash[:notice] %>
+  <p id="notice"> <%= flash[:notice] %> </p>
+<% end %>

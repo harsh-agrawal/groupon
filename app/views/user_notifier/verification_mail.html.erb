@@ -1,7 +1,8 @@
 <p>
-  Hi <%= @user.name %>,
+  Hi <%= @user.first_name %>,
 </p>
 
 Thanks for registering! To confirm your registration click the URL below. <br>
 
 <%= link_to account_activation_url(@user.verification_token), account_activation_url(@user.verification_token) %>
+This Link is valid for only <%= CONSTANTS["time_to_verify"] %> hours.

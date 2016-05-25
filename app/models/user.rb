@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   has_secure_password
 
-  validates :name, presence: true, length: { maximum: 50 }
+  validates :first_name, presence: true, length: { maximum: 50 }
+  validates :last_name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: REGEXP[:email],
                                                                                      message: "Invalid Format"}
   validates :password, length: { minimum: 6 }, allow_blank: true
@@ -11,12 +12,12 @@ class User < ActiveRecord::Base
   after_commit :send_verification_mail, on: :create
 
   #FIXME_AB: valid_verification_token?
-  def verify!
+  def valid_verification_token?
     Time.current <= verification_token_expire_at
   end
 
   #FIXME_AB: This is verify!
-  def update_after_verification
+  def verify!
     self.verified_at = Time.current
     self.verification_token = nil
     self.verification_token_expire_at = nil

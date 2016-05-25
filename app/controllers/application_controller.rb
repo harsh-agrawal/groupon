@@ -3,7 +3,15 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user
+  helper_method :signed_in?
+  helper_method :sign_in
+
+  def ensure_anonymous
+    if signed_in?
+      flash[:notice] = "Your are not allowed to access this page."
+      redirect_to root_url
+    end
+  end
 
   protected
 
@@ -18,7 +26,12 @@ class ApplicationController < ActionController::Base
     def signed_in?
       !!current_user
     end
-    
+
+    def sign_in(user)
+      session[:user_id] = user.id
+      logger.debug "User Logged In"
+    end
+
 end
 
 #FIXME_AB: make a method authenticate which will redirect user to login page if user is not logged in
