@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
 
-#FIXME_AB: logged in user should not be able to access signup form / create / activate
   before_action :ensure_anonymous
 
   def new
@@ -19,9 +18,7 @@ class UsersController < ApplicationController
 
   def account_activation
     user = User.find_by_verification_token(params[:token])
-    #FIXME_AB: 
     if user && user.valid_verification_token? && user.verify!
-      debugger
       sign_in(user)
       flash[:notice] = "Welcome to the Groupon! Your email has been confirmed."
     else

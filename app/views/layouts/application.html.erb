@@ -43,7 +43,6 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Link</a></li>
-            <% #FIXME_AB: signed_in? -%>
             <% if signed_in? %>
             <li><%= link_to 'Logout', sessions_path, method: :delete %></li>
             <% else %>

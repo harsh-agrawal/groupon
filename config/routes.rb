@@ -2,8 +2,13 @@ Rails.application.routes.draw do
 
   get '/activation/:token', to: 'users#account_activation', as: 'account_activation'
 
+  get '/password_reset/:token', to: 'password_resets#new', as: 'reset_password'
+  
+  resource :password_reset, only: [:create]
+
   resource :sessions, only: [:new, :create, :destroy]
 
+  resource :password_request, only: [:new, :create]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

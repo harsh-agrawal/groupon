@@ -13,11 +13,16 @@
         <%= label_tag :password, 'Password:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
           <%= password_field_tag :password, params[:password], class: 'form-control' %>
+          <br>
+          <%= check_box_tag :remember_me, true, true %>
+          <%= label_tag(:remember_me, "Remember Me") %>
         </div>
-      </div>
+      </div>      
+
       <div class="form-group">
         <div class="col-lg-10 col-lg-offset-2">
           <%= submit_tag "Login", class: 'btn btn-primary' %>
+          <%= link_to "Forgot Password?", new_password_request_path %>
         </div>
       </div>
     </fieldset>

@@ -3,8 +3,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :signed_in?
-  helper_method :sign_in
+  helper_method :signed_in?, :sign_in
+
+  #FIXME_AB: login_from_cookie
+  before_action :check_cookies
 
   def ensure_anonymous
     if signed_in?
@@ -30,6 +32,15 @@ class ApplicationController < ActionController::Base
     def sign_in(user)
       session[:user_id] = user.id
       logger.debug "User Logged In"
+    end
+
+    def check_cookies
+      if (cookies[:remember_token])
+        #FIXME_AB: User.verified.where(remember_token: cookies[:remember_token])
+        #FIXME_AB: sign in only when user found else nothing
+        user = User.find_by_remember_token(cookies[:remember_token])
+        sign_in(user)
+      end
     end
 
 end
