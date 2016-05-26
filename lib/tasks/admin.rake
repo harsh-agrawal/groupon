@@ -1,5 +1,5 @@
 namespace :admin do
-  desc "TODO"
+  desc "create an admin"
   task new: :environment do
     user = User.new
 
