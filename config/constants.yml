@@ -1,0 +1,17 @@
+development:
+  default_email_from: harsh@vinsol.com
+  time_to_verify: 6
+  time_to_reset_password: 6
+  password: casioedifice
+
+test:
+  default_email_from: xyz@vinsol.com
+  time_to_verify: 6
+  time_to_reset_password: 6
+  password: casioedifice
+
+production:
+  default_email_from: abc@vinsol.com
+  time_to_verify: 6
+  time_to_reset_password: 6
+  password: casioedifice

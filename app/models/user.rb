@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
     Time.current <= forgot_password_expire_at
   end
 
-  #FIXME_AB: This will be reimplemented as change_password
   def change_password(password, confirm_password)
     self.password = password
     self.password_confirmation = confirm_password
@@ -53,44 +52,42 @@ class User < ActiveRecord::Base
     save!
   end
 
-  #FIXME_AB: clear_remember_token!
   def clear_remember_token!
     self.remember_token = nil
     save!
   end
-  
+
   private
 
-    def set_password_required
-      self.password_required = true
-    end
+  def set_password_required
+    self.password_required = true
+  end
 
-    def random_token
-      SecureRandom.urlsafe_base64.to_s
-    end
+  def random_token
+    SecureRandom.urlsafe_base64.to_s
+  end
 
-    def set_and_generate_verification_token
-      generate_token(:verification_token)
-      set_token_expiry(:verification_token_expire_at)
-    end
+  def set_and_generate_verification_token
+    generate_token(:verification_token)
+    set_token_expiry(:verification_token_expire_at)
+  end
 
-    def set_token_expiry(column)
-      #FIXME_AB: CONSTANTS["time_to_verify"].hours.from_now
-      self[column] = CONSTANTS["time_to_verify"].hours.from_now
-    end
+  def set_token_expiry(column)
+    self[column] = CONSTANTS["time_to_verify"].hours.from_now
+  end
 
-    def send_verification_mail
-      UserNotifier.verification_mail(self).deliver
-    end
+  def send_verification_mail
+    UserNotifier.verification_mail(self).deliver
+  end
 
-    def generate_token(token_for)
-      loop do
-        token_value = random_token
-        if !(User.exists?(token_for => token_value))
-          self[token_for] = token_value
-          break
-        end
+  def generate_token(token_for)
+    loop do
+      token_value = random_token
+      if !(User.exists?(token_for => token_value))
+        self[token_for] = token_value
+        break
       end
     end
+  end
 
 end

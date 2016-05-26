@@ -6,7 +6,6 @@ class SessionsController < ApplicationController
   end
 
   def create
-    #FIXME_AB: User.verified.....
     user = User.verified.where(email: params[:email]).first
     if user && user.authenticate(params[:password])
       if params[:remember_me]
@@ -29,8 +28,7 @@ class SessionsController < ApplicationController
   end
 
   private
-    #FIXME_AB: set_remember_me_cookie
-    def set_remember_me_cookie(user)
-      cookies.permanent[:remember_token] = user.remember_token
-    end
+  def set_remember_me_cookie(user)
+    cookies.permanent[:remember_token] = user.remember_token
+  end
 end
