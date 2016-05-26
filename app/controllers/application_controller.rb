@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :signed_in?, :sign_in
 
   #FIXME_AB: login_from_cookie
-  before_action :check_cookies
+  before_action :login_from_cookie
 
   def ensure_anonymous
     if signed_in?
@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 
     def current_user
       if session[:user_id]
-        @current_user ||=  User.find(session[:user_id])
+        @current_user ||=  User.verified.find(session[:user_id])
       else
         nil
       end
@@ -34,12 +34,14 @@ class ApplicationController < ActionController::Base
       logger.debug "User Logged In"
     end
 
-    def check_cookies
-      if (cookies[:remember_token])
+    def login_from_cookie
+      if !signed_in? && cookies[:remember_token].present?
         #FIXME_AB: User.verified.where(remember_token: cookies[:remember_token])
         #FIXME_AB: sign in only when user found else nothing
-        user = User.find_by_remember_token(cookies[:remember_token])
-        sign_in(user)
+        user = User.verified.find_by_remember_token(cookies[:remember_token])
+        if user
+          sign_in(user)
+        end
       end
     end
 

@@ -1,15 +1,20 @@
 class User < ActiveRecord::Base
   has_secure_password
 
+  attr_accessor :password_required
+
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: REGEXP[:email],
                                                                                      message: "Invalid Format"}
-  validates :password, length: { minimum: 6 }, allow_blank: true
+  validates :password, length: { minimum: 6 }, if: "password_required.present?"
 
 
-  before_create :set_and_generate_verification_token
-  after_commit :send_verification_mail, on: :create
+  scope :verified, -> { where.not(verified_at: nil) }
+
+  before_validation :set_password_required, on: :create
+  before_create :set_and_generate_verification_token, if: '!admin'
+  after_commit :send_verification_mail, on: :create, if: '!admin'
 
   def valid_verification_token?
     Time.current <= verification_token_expire_at
@@ -20,10 +25,13 @@ class User < ActiveRecord::Base
   end
 
   #FIXME_AB: This will be reimplemented as change_password
-  def verify_forgot_password!
+  def change_password(password, confirm_password)
+    self.password = password
+    self.password_confirmation = confirm_password
+    set_password_required
     self.forgot_password_token = nil
     self.forgot_password_expire_at = nil
-    save!
+    save
   end
 
   def verify!
@@ -33,10 +41,11 @@ class User < ActiveRecord::Base
     save!
   end
 
-  def set_forgot_password_token
+  def set_forgot_password_token!
     generate_token(:forgot_password_token)
     set_token_expiry(:forgot_password_expire_at)
     save!
+    UserNotifier.password_reset_mail(self).deliver
   end
 
   def set_remember_token
@@ -45,12 +54,16 @@ class User < ActiveRecord::Base
   end
 
   #FIXME_AB: clear_remember_token!
-  def reset_remember_token!
+  def clear_remember_token!
     self.remember_token = nil
     save!
   end
   
   private
+
+    def set_password_required
+      self.password_required = true
+    end
 
     def random_token
       SecureRandom.urlsafe_base64.to_s
@@ -63,7 +76,7 @@ class User < ActiveRecord::Base
 
     def set_token_expiry(column)
       #FIXME_AB: CONSTANTS["time_to_verify"].hours.from_now
-      self[column] = (Time.current + CONSTANTS["time_to_verify"].hours)
+      self[column] = CONSTANTS["time_to_verify"].hours.from_now
     end
 
     def send_verification_mail

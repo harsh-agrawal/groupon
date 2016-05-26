@@ -4,12 +4,11 @@ class PasswordRequestsController < ApplicationController
 
   def create
     #FIXME_AB: User.verified.where..
-    user = User.find_by(email: params[:email])
+    user = User.verified.find_by(email: params[:email])
     #FIXME_AB: user && user.set_forgot_password_token!
-    if user
-      user.set_forgot_password_token
-      UserNotifier.password_reset_mail(user).deliver #FIXME_AB: Move in the model method
-      flash[:alert] = "Check your Inbox for Rest Password Link."
+    if user && user.set_forgot_password_token!
+       #FIXME_AB: Move in the model method
+      flash[:alert] = "Check your Inbox for Reset Password Link."
       redirect_to root_url
     else
       flash[:alert] = "Invalid User."
