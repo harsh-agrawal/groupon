@@ -5,7 +5,7 @@ class PasswordResetsController < ApplicationController
 
   def create
     if @user.change_password( params[:password], params[:password_confirmation])
-      flash[:alert] = "Password changed successfully."
+      flash[:alert] = "Password changed successfully. Try login."
       redirect_to root_url
     else
       render 'new'
@@ -15,9 +15,9 @@ class PasswordResetsController < ApplicationController
   private
 
   def validate_token
-    @user = User.verified.where(forgot_password_token: params[:token]).first
+    @user = User.verified.where(forgot_password_token: params[:token]).first if params[:token].present?
     if @user.nil? || !@user.valid_forgot_password_token?
-      flash[:alert] = 'Invalid Token'
+      flash[:alert] = 'Invalid URL'
       redirect_to new_sessions_path
     end
   end

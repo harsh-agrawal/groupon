@@ -1,22 +1,22 @@
-<%= render partial: "shared/errors", locals: { object: @user} %> 
-  <div class = 'row' >
-  <div class = "well col-lg-6">
+<%= render partial: "shared/errors", locals: { object: @user} %>
+<div class = 'row' >
+  <div class = "well col-lg-6 col-lg-offset-2">
     <%= form_tag(password_reset_path, method: :post, class: 'form-horizontal') do %>
     <fieldset>
-      <legend>Reset Password</legend>
+      <legend class="text-center">Reset Password</legend>
       <%= hidden_field_tag :token, params[:token] %>
       <div class="form-group">
         <%= label_tag :password, 'Password:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
-          <%= password_field_tag :password, params[:password], class: 'form-control' %>
+          <%= password_field_tag :password, params[:password], class: 'form-control', required: true %>
         </div>
       </div>
       <div class="form-group">
         <%= label_tag :password_confirmation, 'Confirm:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
-          <%= password_field_tag :password_confirmation, params[:password_confirmation], class: 'form-control' %>
+          <%= password_field_tag :password_confirmation, params[:password_confirmation], class: 'form-control', required: true %>
         </div>
-      </div>      
+      </div>
       <div class="form-group">
         <div class="col-lg-10 col-lg-offset-2">
           <%= submit_tag "Submit", class: 'btn btn-primary' %>

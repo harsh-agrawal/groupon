@@ -7023,3 +7023,6 @@ a.list-group-item-danger.active:focus {
 .popover {
   color: #2c3e50;
 }
+.form-center {
+  margin:0 auto
+}

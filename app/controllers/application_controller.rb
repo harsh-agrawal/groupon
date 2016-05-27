@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :signed_in?, :sign_in
 
-  before_action :login_from_cookie
+  before_action :login_from_cookie unless :signed_in?
 
   def ensure_anonymous
     if signed_in?
@@ -34,11 +34,8 @@ class ApplicationController < ActionController::Base
   end
 
   def login_from_cookie
-    if !signed_in? && cookies[:remember_token].present?
-      user = User.verified.find_by_remember_token(cookies[:remember_token])
-      if user
-        sign_in(user)
-      end
+    if cookies[:remember_token].present? && (user = User.verified.find_by_remember_token(cookies[:remember_token]))
+      sign_in(user)
     end
   end
 

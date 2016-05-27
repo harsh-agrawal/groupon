@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     user = User.verified.where(email: params[:email]).first
     if user && user.authenticate(params[:password])
-      if params[:remember_me]
+      if params[:remember_me].present?
         user.set_remember_token
         set_remember_me_cookie(user)
       end

@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       sign_in(user)
       flash[:notice] = "Welcome to the Groupon! Your email has been confirmed."
     else
-      flash[:notice] = "Invalid Activation Token."
+      flash[:notice] = "Invalid URL."
     end
     redirect_to root_url
   end
