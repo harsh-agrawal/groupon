@@ -46,8 +46,7 @@ Rails.application.configure do
       port: 587,
       domain: "gmail.com",
       authentication: "plain",
-      #FIXME_AB: move this too in yml file
-      user_name: "harsh@vinsol.com",
+      user_name: CONSTANTS["email"],
       password: CONSTANTS["password"],
       enable_starttls_auto: true
     }

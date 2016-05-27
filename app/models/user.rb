@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
     generate_token(:forgot_password_token)
     set_token_expiry(:forgot_password_expire_at)
     save!
-    UserNotifier.password_reset_mail(self).deliver
+    UserNotifier.password_reset_mail(self).deliver_now
   end
 
   def set_remember_token
@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
   end
 
   def send_verification_mail
-    UserNotifier.verification_mail(self).deliver
+    UserNotifier.verification_mail(self).deliver_now
   end
 
   def generate_token(token_for)

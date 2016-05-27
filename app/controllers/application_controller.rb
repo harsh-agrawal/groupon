@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :signed_in?, :sign_in
 
-  before_action :login_from_cookie unless :signed_in?
+  before_action :login_from_cookie, unless: :signed_in?
 
   def ensure_anonymous
     if signed_in?
