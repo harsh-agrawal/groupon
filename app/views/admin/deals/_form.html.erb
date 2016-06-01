@@ -1,0 +1,105 @@
+<div class = 'row' >
+  <div class = "well col-lg-6 col-lg-offset-2">
+    <%= form_for [:admin, @deal], :html=> { class: 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend class="text-center"><h2>New Deal</h2></legend>
+      <div class="form-group">
+        <%= f.label :title, 'Title:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= f.text_field :title, class: 'form-control', required: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :description, 'Description:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= f.text_area :description, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :category_id, 'Category:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= f.collection_select(:category_id, Category.all, :id, :name, prompt: 'Select One') %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :min_qty, 'Minimum quantity:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-5">
+          <%= f.text_field :min_qty, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :max_qty, 'Maximum quantity:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-5">
+          <%= f.text_field :max_qty, class: 'form-control' %>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :start_time, 'Start Time:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= f.datetime_select :start_time, ampm: true, prompt: true, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :expire_time, 'Expire Time:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <br>
+          <%= f.datetime_select :expire_time, ampm: true, prompt: true, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :price, 'Price:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-5">
+          <%= f.text_field :price, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :merchant_id, 'Merchant:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= f.collection_select(:merchant_id, Merchant.all, :id, :name, prompt: 'Select One') %>
+        </div>
+      </div>
+      <%= f.fields_for :locations do |ff| %>
+        <div class="form-group row">
+          <%= ff.label :address, 'Address: ', class: 'col-lg-2 control-label' %>
+          <div class="col-lg-4">
+            <%= ff.text_field :address, class: 'form-control' %>
+          </div>
+          <%= ff.label :city, 'City: ', class: 'col-lg-2 control-label' %>
+          <div class="col-lg-4">
+            <%= ff.text_field :city, class: 'form-control' %>
+          </div>
+          <%= ff.label :state, 'State: ', class: 'col-lg-2 control-label' %>
+          <div class="col-lg-4">
+            <%= ff.text_field :state, class: 'form-control' %>
+          </div>
+          
+          <%= ff.label :country, 'Country: ', class: 'col-lg-2 control-label' %>
+          <div class="col-lg-4">
+            <%= ff.text_field :country, class: 'form-control' %>
+          </div>
+        </div>
+      <% end %>
+      <div class="form-group">
+        <%= f.label :max_qty_per_customer, 'Max. quantity per customer:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-5">
+          <br>
+          <%= f.text_field :max_qty_per_customer, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :instructions, 'Instructions:', class: 'col-lg-2 control-label' %>
+        <div class="col-lg-10">
+          <%= f.text_area :instructions, class: 'form-control' %>
+        </div>
+      </div>
+      <br>
+      <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-2">
+          <%= f.submit class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </fieldset>
+    <% end %>
+  </div>
+</div>

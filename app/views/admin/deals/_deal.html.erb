@@ -1,0 +1,24 @@
+<tr class = 'text-center' >
+  <td>
+    <%= deal_counter + 1 %>
+  </td>
+  <td >
+    <%= deal.title %>
+  </td>
+  <td>
+    <%= truncate(strip_tags(deal.description), length: 80) %>
+  </td>
+  <td>
+    <div  data-behaviour = 'unpublishable', class="<%= deal.publishable ? 'show' : 'hidden' %>">
+      <%= link_to 'Unpublish', admin_deal_unpublish_path(deal), remote: true, format: :json, class: "btn btn-danger"%>
+    </div>
+    <div data-behaviour = 'publishable', class="<%= deal.publishable ? 'hidden' : 'show' %>">
+      <%= link_to 'Publish', admin_deal_publish_path(deal), remote: true, format: :json, class: "btn btn-success" %>
+    </div>
+  </td>
+  <td >
+    <%= link_to 'Show', admin_deal_path(deal) %><br/>
+    <%= link_to 'Edit', edit_admin_deal_path(deal) %><br/>
+    <%= link_to 'Destroy', admin_deal_path(deal), method: :delete, data: { confirm: 'Are you sure?' } %>
+  </td>
+</tr>

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get '/activation/:token', to: 'users#account_activation', as: 'account_activation'
 
   get '/password_reset/:token', to: 'password_resets#new', as: 'reset_password'
-  
+
   resource :password_reset, only: [:create]
 
   resource :sessions, only: [:new, :create, :destroy]
@@ -16,9 +16,16 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   get "/signup", to: 'users#new'
-  
+
   resource :users, only: [:create]
-  
+
+  get 'admin' => 'admin#index'
+
+  namespace :admin do
+    get 'deals/publish/:id', to: 'deals#publish', as: 'deal_publish'
+    get 'deals/unpublish/:id', to: 'deals#unpublish', as: 'deal_unpublish'
+    resources :deals
+  end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

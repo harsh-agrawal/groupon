@@ -13,7 +13,11 @@ class SessionsController < ApplicationController
         set_remember_me_cookie(user)
       end
       sign_in(user)
-      redirect_to root_url
+      if user.admin?
+        redirect_to admin_url
+      else
+        redirect_to root_url
+      end
     else
       flash.now[:alert] = "Invalid email/password combination"
       render 'new'
