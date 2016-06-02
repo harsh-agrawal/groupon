@@ -31,12 +31,9 @@
 
 class Deal < ActiveRecord::Base
 
-  #FIXME_AB:  use with_options to group all publishable validations
-
   validates :title, presence: true
   validates :category, presence: true
   validates :merchant, presence: true
-  #FIXME_AB:  also add min length(10 words) on description, when publish
   with_options if: "publishable?" do |deal|
 
     deal.validates :description, presence: true, length: {
@@ -49,9 +46,7 @@ class Deal < ActiveRecord::Base
     deal.validates :expire_time, presence: true
     deal.validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
     deal.validates :instructions, presence: true
-    #FIXME_AB: validates category and merchant
     deal.validates_associated :locations
-    #FIXME_AB: don't need CategoryValidator and MerchantValidator. validates :category, presence: true will do
     deal.validates_with StartTimeValidator
     deal.validates_with ExpireTimeValidator
   end
@@ -60,9 +55,8 @@ class Deal < ActiveRecord::Base
   belongs_to :category
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
-  accepts_nested_attributes_for :locations
+  accepts_nested_attributes_for :locations, allow_destroy: true
 
-  #FIXME_AB: before_update :check_if_deal_can_be_updated?
   before_update :check_if_deal_can_be_updated?, if: ("publishable?")
 
 

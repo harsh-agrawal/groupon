@@ -11,10 +11,6 @@ $(document).ready(function() {
   var $modal_body = $modal_container.find('[data-behaviour = modal-body]');
   var $modal_title = $modal_container.find('[data-behaviour = modal-title]');
 
-  // FIXME_AB: bind events on the links not on containers
-  // FIXME_AB: fix codeclimate and jshint issues
-  // FIXME_AB: errors should be in red color
-
   function HideCurrentContainer($container) {
     $container.addClass('hidden');
   }

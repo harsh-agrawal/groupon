@@ -11,7 +11,6 @@ class Admin::DealsController < Admin::BaseController
   def create
     @deal = Deal.new(deal_params)
     if @deal.save
-      #FIXME_AB: merge following two lines
       redirect_to admin_url, alert: "Deal successfully created."
     else
       render 'new'
@@ -41,7 +40,6 @@ class Admin::DealsController < Admin::BaseController
   end
 
   def destroy
-    #FIXME_AB: you can't be sure that the object is destroyed, if else needed
     if @deal.destroy
       redirect_to admin_deals_path, notice: 'Deal was successfully deleted.'
     else
@@ -53,17 +51,15 @@ class Admin::DealsController < Admin::BaseController
 
   def deal_params
     params.require(:deal).permit(:title, :description, :min_qty, :max_qty, :start_time, :expire_time, :price, :max_qty_per_customer, :instructions, :category_id, :merchant_id,
-                                 locations_attributes: [:id, :address, :city, :state, :country]
+                                 locations_attributes: [:id, :address, :city, :state, :country, :_destroy]
                                  )
   end
 
   def set_deal
-    if (@deal = Deal.find_by_id(params[:id]))
-      @deal
-    else
+    @deal = Deal.find_by_id(params[:id])
+    if @deal.nil?
       redirect_to admin_url, alert: "No such Deal exists."
     end
-    #FIXME_AB: what if deal not found
   end
 
 end

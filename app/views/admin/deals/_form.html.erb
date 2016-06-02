@@ -1,6 +1,6 @@
 <div class = 'row' >
   <div class = "well col-lg-6 col-lg-offset-2">
-    <%= form_for [:admin, @deal], :html=> { class: 'form-horizontal' } do |f| %>
+    <%= nested_form_for [:admin, @deal], :html=> { class: 'form-horizontal' } do |f| %>
     <fieldset>
       <legend class="text-center"><h2>New Deal</h2></legend>
       <div class="form-group required">
@@ -39,7 +39,7 @@
           <%= f.text_field :max_qty, class: 'form-control' %>
         </div>
       </div>
-      
+<% #FIXME_AB: country dropdown and convert revelent fields to number fields -%>      
       <div class="form-group">
         <%= f.label :start_time, 'Start Time:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
@@ -67,39 +67,19 @@
         </div>
       </div>
       <div class="form-group">
-        <%= f.label :instructions, 'Instructions:', class: 'col-lg-2 control-label' %>
+        <%= f.label :instructions, 'Instructions to redeem:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
           <%= f.text_area :instructions, class: 'form-control' %>
         </div>
       </div>
-      <%= f.fields_for :locations do |ff| %>
-      <fieldset >
-        <legend>Location</legend>
-        <% #FIXME_AB: move location fields at bottom -%>
-        <div class="form-group row">
-          <%= ff.label :address, 'Address: ', class: 'col-lg-2 control-label' %>
-          <div class="col-lg-4">
-            <%= ff.text_field :address, class: 'form-control' %>
-          </div>
-          <%= ff.label :city, 'City: ', class: 'col-lg-2 control-label' %>
-          <div class="col-lg-4">
-            <%= ff.text_field :city, class: 'form-control' %>
-          </div>
-          <%= ff.label :state, 'State: ', class: 'col-lg-2 control-label' %>
-          <div class="col-lg-4">
-            <%= ff.text_field :state, class: 'form-control' %>
-          </div>
-          
-          <%= ff.label :country, 'Country: ', class: 'col-lg-2 control-label' %>
-          <div class="col-lg-4">
-            <%= ff.text_field :country, class: 'form-control' %>
-          </div>
-        </div>
-      </fieldset>
-        <% end %>
+
+      <div class="form-group">
+        <%= f.fields_for :locations %>
+        <%= f.link_to_add "Add Location", :locations, class: "btn btn-default pull-right" %>
+      </div>
       <br>
       <div class="form-group">
-        <div class="col-lg-10 col-lg-offset-2">
+        <div class="col-lg-10 col-lg-offset-5">
           <%= f.submit class: 'btn btn-primary' %>
         </div>
       </div>

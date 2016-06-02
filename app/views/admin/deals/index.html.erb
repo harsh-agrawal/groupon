@@ -14,9 +14,6 @@
   <%= render @deals %>
 </table>
 
-<% #FIXME_AB: use content_for tag -%>
 <% content_for :head do %>
   <%= javascript_include_tag 'admin/deals' %>
 <% end %>
-
-<% #FIXME_AB: rename modal_for_publish to modal and extract it in some partial so that it can be reused or add it to layout -%>

@@ -13,8 +13,6 @@
 #
 
 class Category < ActiveRecord::Base
-  #FIXME_AB: dont allow category to destroy if deals are present for the category
-  #FIXME_AB: no validations?
   validates :name, presence: true, uniqueness: true
   has_many :deals, dependent: :restrict_with_error
 end

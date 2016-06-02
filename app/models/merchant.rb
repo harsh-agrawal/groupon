@@ -16,8 +16,6 @@
 
 class Merchant < ActiveRecord::Base
   has_secure_password
-  #FIXME_AB: validations missing
-  #FIXME_AB: handle deletion
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
   has_many :deals, dependent: :restrict_with_error

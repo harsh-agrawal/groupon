@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Groupon</title>
-    <% #FIXME_AB: make a seperate admin.js and admin.css for admin layout -%>
     <%= stylesheet_link_tag 'admin/admin', media: 'all' %>
     <%= javascript_include_tag 'admin/admin' %>
     <%= yield :head %>
@@ -41,7 +40,6 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Link</a></li>
             <li><%= link_to 'Logout', sessions_path, method: :delete %></li>
-            <% #FIXME_AB: we don't need these links in admin layout -%>
           </li>
         </ul>
       </div>
