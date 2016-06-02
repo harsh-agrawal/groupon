@@ -45,3 +45,5 @@ exclude_paths:
 - vendor/
 - "app/assets/javascripts/bootstrap.js"
 - "app/assets/stylesheets/bootstrap.css"
+- "app/assets/javascripts/admin/bootstrap.js"
+- "app/assets/stylesheets/admin/bootstrap.css"
