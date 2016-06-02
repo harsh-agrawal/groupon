@@ -2,7 +2,9 @@
 <html>
   <head>
     <title>Groupon</title>
+    <%= yield :script %>
     <%= stylesheet_link_tag 'admin/admin', media: 'all' %>
+     <%= stylesheet_link_tag 'admin/form', media: 'all' %>
     <%= javascript_include_tag 'admin/admin' %>
     <%= yield :head %>
     <%= csrf_meta_tags %>

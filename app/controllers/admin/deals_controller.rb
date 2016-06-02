@@ -1,11 +1,12 @@
 class Admin::DealsController < Admin::BaseController
 
   before_action :set_deal, only: [:show, :edit, :destroy, :update, :publish, :unpublish]
+  before_action :create_countries_list
 
   def new
-    #FIXME_AB: mark * for requried fields
     @deal = Deal.new
     @deal.locations.build
+    @deal.deal_images.build
   end
 
   def create
@@ -51,7 +52,8 @@ class Admin::DealsController < Admin::BaseController
 
   def deal_params
     params.require(:deal).permit(:title, :description, :min_qty, :max_qty, :start_time, :expire_time, :price, :max_qty_per_customer, :instructions, :category_id, :merchant_id,
-                                 locations_attributes: [:id, :address, :city, :state, :country, :_destroy]
+                                 locations_attributes: [:id, :address, :city, :state, :country, :_destroy],
+                                 deal_images_attributes: [:id, :image]
                                  )
   end
 
@@ -60,6 +62,11 @@ class Admin::DealsController < Admin::BaseController
     if @deal.nil?
       redirect_to admin_url, alert: "No such Deal exists."
     end
+  end
+
+  def create_countries_list
+    @countries = JSON.parse(File.read("./lib/countries.json"))
+    @countries_list ||= @countries.map { |country| country['name'] }
   end
 
 end

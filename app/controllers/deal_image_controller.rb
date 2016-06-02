@@ -1,0 +1,3 @@
+class DealImageController < ApplicationController
+
+end

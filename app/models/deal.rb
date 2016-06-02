@@ -47,14 +47,18 @@ class Deal < ActiveRecord::Base
     deal.validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
     deal.validates :instructions, presence: true
     deal.validates_associated :locations
+    deal.validates_associated :deal_images
     deal.validates_with StartTimeValidator
     deal.validates_with ExpireTimeValidator
   end
   validates :max_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: ->(deal) { deal.min_qty } }, if: ("publishable? && min_qty?")
   validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
+  
   belongs_to :category
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
+  has_many :deal_images, dependent: :destroy, validate: false
+  accepts_nested_attributes_for :deal_images, allow_destroy: true
   accepts_nested_attributes_for :locations, allow_destroy: true
 
   before_update :check_if_deal_can_be_updated?, if: ("publishable?")

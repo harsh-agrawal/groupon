@@ -2,7 +2,13 @@
   <div class = "well col-lg-6 col-lg-offset-2">
     <%= nested_form_for [:admin, @deal], :html=> { class: 'form-horizontal' } do |f| %>
     <fieldset>
-      <legend class="text-center"><h2>New Deal</h2></legend>
+      <legend class="text-center"><h2>
+        <% if @deal.persisted? %>
+        Edit Deal
+        <%   else %>
+        New Deal
+        <% end %>
+      </h2></legend>
       <div class="form-group required">
         <%= f.label :title, 'Title:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
@@ -36,10 +42,9 @@
       <div class="form-group">
         <%= f.label :max_qty, 'Maximum quantity:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-5">
-          <%= f.text_field :max_qty, class: 'form-control' %>
+          <%= f.number_field :max_qty, class: 'form-control' %>
         </div>
       </div>
-<% #FIXME_AB: country dropdown and convert revelent fields to number fields -%>      
       <div class="form-group">
         <%= f.label :start_time, 'Start Time:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-10">
@@ -56,14 +61,14 @@
       <div class="form-group">
         <%= f.label :price, 'Price:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-5">
-          <%= f.text_field :price, class: 'form-control' %>
+          <%= f.number_field :price, class: 'form-control' %>
         </div>
       </div>
       <div class="form-group">
         <%= f.label :max_qty_per_customer, 'Max. quantity per customer:', class: 'col-lg-2 control-label' %>
         <div class="col-lg-5">
           <br>
-          <%= f.text_field :max_qty_per_customer, class: 'form-control' %>
+          <%= f.number_field :max_qty_per_customer, class: 'form-control' %>
         </div>
       </div>
       <div class="form-group">
@@ -72,7 +77,10 @@
           <%= f.text_area :instructions, class: 'form-control' %>
         </div>
       </div>
-
+      <div class="form-group">
+        <%= f.fields_for :deal_images %>
+        <%= f.link_to_add "Add Image", :deal_images, class: "btn btn-default pull-right" %>
+      </div>
       <div class="form-group">
         <%= f.fields_for :locations %>
         <%= f.link_to_add "Add Location", :locations, class: "btn btn-default pull-right" %>

@@ -1,0 +1,9 @@
+<fieldset>
+  <div class="form-group row">
+    <%= f.label :image, 'Image: ', class: 'col-lg-2 control-label' %>
+    <div class="col-lg-4">
+      <%= f.file_field :image, class: 'form-control' %>
+    </div>
+  </div>
+  <%= f.link_to_remove "Remove", class: "pull-right" %>
+</fieldset>
