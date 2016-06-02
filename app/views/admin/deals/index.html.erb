@@ -4,29 +4,19 @@
     <tr>
       <th class = 'text-center'>#</th>
       <th class = 'text-center'>Title</th>
-      <th class = 'text-center'>Description</th>
-      <th class = 'text-center'>Status</th>
+      <th class = 'text-center'>Price</th>
+      <th class = 'text-center' width = "15%" >Start Time</th>
+      <th class = 'text-center' width = "15%">Expire Time</th>
+      <th class = 'text-center' width = "25%">Status</th>
       <th class = 'text-center'>Actions</th>
     </tr>
   </thead>
   <%= render @deals %>
 </table>
 
-<%= javascript_include_tag 'admin/deals' %>
-<%= stylesheet_link_tag 'admin/deals', media: 'all' %>
+<% #FIXME_AB: use content_for tag -%>
+<% content_for :head do %>
+  <%= javascript_include_tag 'admin/deals' %>
+<% end %>
 
-<div class="modal", data-behaviour = 'modal_for_publish', tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" data-behaviour = 'modal-title'>Modal title</h4>
-      </div>
-      <div class="modal-body", data-behaviour = 'modal-body'>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+<% #FIXME_AB: rename modal_for_publish to modal and extract it in some partial so that it can be reused or add it to layout -%>

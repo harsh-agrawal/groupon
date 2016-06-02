@@ -6,14 +6,29 @@
     <%= deal.title %>
   </td>
   <td>
-    <%= truncate(strip_tags(deal.description), length: 80) %>
+    <%= deal.price %>
   </td>
   <td>
+    <% if deal.start_time %>
+    <%= deal.start_time.to_formatted_s(:long) %>
+    <% end %>
+  </td>
+  <td>
+    <% if deal.expire_time %>
+    <%= deal.expire_time.to_formatted_s(:long) %>
+    <% end %>
+  </td>
+  <td>
+    <% #FIXME_AB: use disable with option -%>
     <div  data-behaviour = 'unpublishable', class="<%= deal.publishable ? 'show' : 'hidden' %>">
-      <%= link_to 'Unpublish', admin_deal_unpublish_path(deal), remote: true, format: :json, class: "btn btn-danger"%>
+      <%= image_tag("green-circle.png", size: "18") %>
+      Published &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <%= link_to 'Unpublish It', admin_deal_unpublish_path(deal), data: { disable_with: :processing, behaviour: :unpublish }, remote: true, format: :json, class: "btn btn-danger"%>
     </div>
     <div data-behaviour = 'publishable', class="<%= deal.publishable ? 'hidden' : 'show' %>">
-      <%= link_to 'Publish', admin_deal_publish_path(deal), remote: true, format: :json, class: "btn btn-success" %>
+      <%= image_tag("red-circle.png", size: "18") %>
+      Unpublished &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <%= link_to 'Publish It', admin_deal_publish_path(deal), data: { disable_with: :processing, behaviour: :publish } ,remote: true, format: :json, class: "btn btn-success" %>
     </div>
   </td>
   <td >
