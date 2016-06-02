@@ -58,8 +58,8 @@ class Deal < ActiveRecord::Base
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
   has_many :deal_images, dependent: :destroy, validate: false
-  accepts_nested_attributes_for :deal_images, allow_destroy: true
-  accepts_nested_attributes_for :locations, allow_destroy: true
+  accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
   before_update :check_if_deal_can_be_updated?, if: ("publishable?")
 

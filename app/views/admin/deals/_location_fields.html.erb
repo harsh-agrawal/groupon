@@ -16,8 +16,8 @@
     <%= f.label :country, 'Country: ', class: 'col-lg-2 control-label' %>
     <div class="col-lg-4">
       <br>
-      <%= f.select(:country, @countries_list, class: "btn btn-mini") %>
+      <%= f.select(:country, @countries_list, class: "btn btn-mini", prompt: 'Select Country') %>
     </div>
   </div>
-  <%= f.link_to_remove "Remove", class: "pull-right" %>
-</fieldset>
+  <%= f.link_to_remove "Remove", class: "pull-right btn btn-danger btn-xs" %>
+</fieldset><br>
