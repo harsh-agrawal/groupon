@@ -19,3 +19,4 @@
 .byebug_history
 config/constants.yml
 config/database.yml
+public/system/deal_images
