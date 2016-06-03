@@ -1,45 +1,53 @@
-<h1> Detail </h1>
-<p>
-  <strong>Title:</strong>
-  <%= @deal.title %>
-</p>
-<p>
-  <strong>Description:</strong>
-  <%= @deal.description %>
-</p>
-<p>
-  <strong>Minimum Quantity:</strong>
-  <%= @deal.min_qty %>
-</p>
-<p>
-  <strong>Maximum Quantity:</strong>
-  <%= @deal.max_qty %>
-</p>
-<p>
-  <strong>Start Time:</strong>
-  <%= @deal.start_time %>
-</p>
-<p>
-  <strong> Expire Time:</strong>
-  <%= @deal.expire_time %>
-</p>
-<p>
-  <strong>Price:</strong>
-  <%= @deal.price %>
-</p>
-<p>
-  <strong> Maximum Quantity Per Customer:</strong>
-  <%= @deal.max_qty_per_customer %>
-</p>
-<p>
-  <strong> Instructions:</strong>
-  <%= @deal.instructions %>
-</p>
-<p>
-  <strong> Category:</strong>
-  <%= @deal.category.name %>
-</p>
-<p>
-  <strong>Merchant:</strong>
-  <%= @deal.merchant.name %>
-</p>
+<%= javascript_include_tag 'admin/deals' %> 
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+          <%= link_to 'Edit', edit_admin_deal_path(@deal), class: "btn btn-warning pull-right" %>
+      <div class="page-header">
+        <div class="pull-left">
+          <h1><%= @deal.title %></h1>
+          <p class="lead text-success"> by <%= @deal.merchant.name %></p>
+        </div>
+        <div class="pull-right">
+          <h2 class="text-right"> Deal @  $ <%= @deal.price %></h2>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <hr>
+      <p> <b> Category : &nbsp; &nbsp;</b> <%= @deal.category.name if @deal.category %>
+        <hr>
+        <p> <b> Deal Starts : &nbsp; &nbsp;</b> <%= @deal.start_time.to_formatted_s(:long) if @deal.start_time %>
+        <b> &nbsp; &nbsp; and &nbsp; Expires : &nbsp; &nbsp;</b> <%= @deal.expire_time.to_formatted_s(:long) if @deal.expire_time %></p>
+        <hr>
+        <p> <b> Min. Deals &nbsp; &nbsp;</b> <%= @deal.min_qty %>
+          <b> &nbsp; &nbsp; Max. Deals &nbsp; &nbsp;</b> <%= @deal.max_qty %>
+          <b> &nbsp; &nbsp; Max. Qty per customer &nbsp; &nbsp;</b> <%= @deal.max_qty_per_customer %>
+          <hr>
+          <div class = "row">
+            <%= render partial: 'deal_images/deal_image', collection: @deal.deal_images %>
+          </div>
+          <hr>
+          <p class="lead"> Description</p>
+          <p><%= @deal.description %> </p>
+          <hr>
+          <p class="lead"> Instructions</p>
+          <p><%= @deal.instructions %> </p>
+          <hr>
+          
+          <h4> <b> Locations : </b> </h4>
+          <div class = "row">
+            <%= render partial: 'locations/location', collection: @deal.locations %>
+          </div>
+          <hr>
+        </p>
+      </div>
+    <div  data-behaviour = 'unpublishable', class="<%= @deal.publishable ? 'show' : 'hidden' %> ">
+
+      <%= link_to 'Unpublish It', unpublish_admin_deal_path(@deal), data: { disable_with: :processing, behaviour: :unpublish }, remote: true, format: :json, class: "btn btn-danger"%>
+    </div>
+    <div data-behaviour = 'publishable', class="<%= @deal.publishable ? 'hidden' : 'show' %> ">
+
+      <%= link_to 'Publish It', publish_admin_deal_path(@deal), data: { disable_with: :processing, behaviour: :publish } ,remote: true, format: :json, class: "btn btn-success" %>
+    </div>
+    </div>
+  </div>

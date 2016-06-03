@@ -21,7 +21,8 @@
 #
 
 class DealImage < ActiveRecord::Base
-  has_attached_file :image
-  validates_attachment :image, content_type: { content_type: ["image/jpeg", "image/gif", "image/png"] }
+  #FIXME_AB: when uploading image generate a thumbnail of 150px 150px, which we can use in the edit form and other place
+  has_attached_file :image, styles: { thumb: "150x150>" }
+  validates_attachment :image, presence: true, content_type: { content_type: ["image/jpeg", "image/gif", "image/png"] }
   belongs_to :deal
 end

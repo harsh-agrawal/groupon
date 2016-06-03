@@ -17,6 +17,9 @@ html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
+.thumb {
+    margin-bottom: 30px;
+}
 body {
   margin: 0;
 }

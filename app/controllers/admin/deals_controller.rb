@@ -1,7 +1,6 @@
 class Admin::DealsController < Admin::BaseController
 
   before_action :set_deal, only: [:show, :edit, :destroy, :update, :publish, :unpublish]
-  before_action :create_countries_list
 
   def new
     @deal = Deal.new
@@ -33,7 +32,7 @@ class Admin::DealsController < Admin::BaseController
 
   def publish
     @published = @deal.publish
-    @errors_full_messages =  @deal.errors.full_messages + @deal.locations.first.errors.full_messages
+    @errors_full_messages =  @deal.errors.full_messages
   end
 
   def unpublish
@@ -53,7 +52,7 @@ class Admin::DealsController < Admin::BaseController
   def deal_params
     params.require(:deal).permit(:title, :description, :min_qty, :max_qty, :start_time, :expire_time, :price, :max_qty_per_customer, :instructions, :category_id, :merchant_id,
                                  locations_attributes: [:id, :address, :city, :state, :country, :_destroy],
-                                 deal_images_attributes: [:id, :image]
+                                 deal_images_attributes: [:id, :image, :_destroy]
                                  )
   end
 
@@ -62,11 +61,6 @@ class Admin::DealsController < Admin::BaseController
     if @deal.nil?
       redirect_to admin_url, alert: "No such Deal exists."
     end
-  end
-
-  def create_countries_list
-    @countries = JSON.parse(File.read("./lib/countries.json"))
-    @countries_list ||= @countries.map { |country| country['name'] }
   end
 
 end

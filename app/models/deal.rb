@@ -30,13 +30,12 @@
 #
 
 class Deal < ActiveRecord::Base
-
   validates :title, presence: true
   validates :category, presence: true
   validates :merchant, presence: true
   with_options if: "publishable?" do |deal|
 
-    deal.validates :description, presence: true, length: {
+    deal.validates :description, length: {
       minimum: 10,
       tokenizer: lambda { |str| str.split(/\s+/)},
       too_short: "must have at least 10 words"
@@ -50,10 +49,13 @@ class Deal < ActiveRecord::Base
     deal.validates_associated :deal_images
     deal.validates_with StartTimeValidator
     deal.validates_with ExpireTimeValidator
+    deal.validates_with ImageValidator
+    deal.validates_with LocationValidator
   end
   validates :max_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: ->(deal) { deal.min_qty } }, if: ("publishable? && min_qty?")
   validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
-  
+
+
   belongs_to :category
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false

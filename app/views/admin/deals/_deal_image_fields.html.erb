@@ -2,8 +2,12 @@
   <div class="form-group row">
     <%= f.label :image, 'Image: ', class: 'col-lg-2 control-label' %>
     <div class="col-lg-4">
-      <%= f.file_field :image, class: 'form-control' %>
+      <% if f.object.image.present? %>
+        <%= image_tag f.object.image.url(:thumb) %>
+      <% else %>
+        <%= f.file_field :image %>
+      <% end %>
     </div>
-  <%= f.link_to_remove "Remove", class: "btn btn-danger btn-xs" %>
   </div>
+  <%= f.link_to_remove "Remove", class: "btn btn-danger btn-xs" %>
 </fieldset>

@@ -22,12 +22,12 @@
     <div  data-behaviour = 'unpublishable', class="<%= deal.publishable ? 'show' : 'hidden' %>">
       <%= image_tag("green-circle.png", size: "18") %>
       Published &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <%= link_to 'Unpublish It', admin_deal_unpublish_path(deal), data: { disable_with: :processing, behaviour: :unpublish }, remote: true, format: :json, class: "btn btn-danger"%>
+      <%= link_to 'Unpublish It', unpublish_admin_deal_path(deal), data: { disable_with: :processing, behaviour: :unpublish }, remote: true, format: :json, class: "btn btn-danger"%>
     </div>
     <div data-behaviour = 'publishable', class="<%= deal.publishable ? 'hidden' : 'show' %>">
       <%= image_tag("red-circle.png", size: "18") %>
       Unpublished &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <%= link_to 'Publish It', admin_deal_publish_path(deal), data: { disable_with: :processing, behaviour: :publish } ,remote: true, format: :json, class: "btn btn-success" %>
+      <%= link_to 'Publish It', publish_admin_deal_path(deal), data: { disable_with: :processing, behaviour: :publish } ,remote: true, format: :json, class: "btn btn-success" %>
     </div>
   </td>
   <td >
