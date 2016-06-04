@@ -9,15 +9,15 @@
           <p class="lead text-success"> by <%= @deal.merchant.name %></p>
         </div>
         <div class="pull-right">
-          <h2 class="text-right"> Deal @  $ <%= @deal.price %></h2>
+          <h2 class="text-right"> Deal @  <%= number_to_currency(@deal.price, unit: "Rs.")%></h2>
         </div>
         <div class="clearfix"></div>
       </div>
       <hr>
       <p> <b> Category : &nbsp; &nbsp;</b> <%= @deal.category.name if @deal.category %>
         <hr>
-        <p> <b> Deal Starts : &nbsp; &nbsp;</b> <%= @deal.start_time.to_formatted_s(:long) if @deal.start_time %>
-        <b> &nbsp; &nbsp; and &nbsp; Expires : &nbsp; &nbsp;</b> <%= @deal.expire_time.to_formatted_s(:long) if @deal.expire_time %></p>
+        <p> <b> Deal Starts : &nbsp; &nbsp;</b> <%= @deal.start_time.strftime("%d %B %Y, %l:%M:%S%P") if @deal.start_time %>
+        <b> &nbsp; &nbsp; and &nbsp; Expires : &nbsp; &nbsp;</b> <%= @deal.expire_time.strftime("%d %B %Y, %l:%M:%S%P") if @deal.expire_time %></p>
         <hr>
         <p> <b> Min. Deals &nbsp; &nbsp;</b> <%= @deal.min_qty %>
           <b> &nbsp; &nbsp; Max. Deals &nbsp; &nbsp;</b> <%= @deal.max_qty %>

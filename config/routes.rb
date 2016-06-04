@@ -22,9 +22,6 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#index'
 
   namespace :admin do
-    #FIXME_AB: make these to member function of deal resource
-    # get 'deals/:id/publish/', to: 'deals#publish', as: 'deal_publish'
-    # get 'deals/:id/unpublish/', to: 'deals#unpublish', as: 'deal_unpublish'
     resources :deals do
       member do
         get 'publish'
