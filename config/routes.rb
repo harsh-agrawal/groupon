@@ -19,6 +19,12 @@ Rails.application.routes.draw do
 
   resource :users, only: [:create]
 
+  get '/deals/index/', to: 'deals#index'
+  get '/deals/past/', to: 'deals#past'
+  get '/deals/search/', to: 'deals#search'
+
+  resources :deals, only: [:show]
+
   get 'admin' => 'admin#index'
 
   namespace :admin do

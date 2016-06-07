@@ -29,6 +29,9 @@ gem "nested_form"
 
 #paperclip
 gem "paperclip", "~> 5.0.0.beta1"
+
+#pagination
+gem 'will_paginate', '~> 3.1.0'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

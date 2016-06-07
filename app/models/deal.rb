@@ -30,6 +30,9 @@
 #
 
 class Deal < ActiveRecord::Base
+
+  self.per_page = 10
+
   validates :title, presence: true
   validates :category, presence: true
   validates :merchant, presence: true
@@ -56,6 +59,10 @@ class Deal < ActiveRecord::Base
   validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
 
 
+  scope :published, -> { where(publishable: true) }
+  scope :live, -> (time = Time.current){ where("start_time <= ?", time).where("? <= expire_time ", time) }
+  scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
+  scope :search, ->(keyword) { published.includes(:locations).where("title LIKE ? OR locations.city LIKE ?","%#{keyword}%", "%#{keyword}%" ).references(:locations)}
   belongs_to :category
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
@@ -63,8 +70,7 @@ class Deal < ActiveRecord::Base
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
-  before_update :check_if_deal_can_be_updated?, if: ("publishable?")
-
+  before_validation :check_if_deal_can_be_updated?, if: ("publishable?")
 
   def publish
     self.publishable = true

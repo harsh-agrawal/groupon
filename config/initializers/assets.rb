@@ -13,3 +13,6 @@ Rails.application.config.assets.precompile += %w( admin/admin.css )
 Rails.application.config.assets.precompile += %w( admin/admin.js )
 Rails.application.config.assets.precompile += %w( admin/form.css )
 Rails.application.config.assets.precompile += %w( admin/location.css )
+Rails.application.config.assets.precompile += %w( cycle.js )
+Rails.application.config.assets.precompile += %w( slideshow.js )
+
