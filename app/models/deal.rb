@@ -1,4 +1,4 @@
-# == Schema Information
+# == Schema Informationrb
 #
 # Table name: deals
 #
@@ -62,11 +62,13 @@ class Deal < ActiveRecord::Base
   scope :published, -> { where(publishable: true) }
   scope :live, -> (time = Time.current){ where("start_time <= ?", time).where("? <= expire_time ", time) }
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
-  scope :search, ->(keyword) { published.includes(:locations).where("title LIKE ? OR locations.city LIKE ?","%#{keyword}%", "%#{keyword}%" ).references(:locations)}
+  scope :search, ->(keyword) { published.includes(:locations).where("lower(title) LIKE ? OR lower(locations.city) LIKE ?","%#{keyword.downcase}%", "%#{keyword.downcase}%" ).references(:locations)}
+ 
   belongs_to :category
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
   has_many :deal_images, dependent: :destroy, validate: false
+ 
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
