@@ -32,6 +32,8 @@ gem "paperclip", "~> 5.0.0.beta1"
 
 #pagination
 gem 'will_paginate', '~> 3.1.0'
+#stripe
+gem 'stripe'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

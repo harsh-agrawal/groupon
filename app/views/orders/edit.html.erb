@@ -1,0 +1,73 @@
+<%= render partial: "shared/errors", locals: { object: @order} %>
+<div class="container">
+    <div class="page-header">
+        <h1> Place Your Order </h1>
+    </div>
+    <div class="container">
+        <div class="row col-md-12 panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center"><strong>Order details # <%= @order.id %></strong></h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <td>#</td>
+                                <td><strong>Deal Name</strong></td>
+                                <td class="text-center"><strong> Deal Price</strong></td>
+                                <td class="text-center"><strong>Deal Quantity</strong></td>
+                                <td class="text-right"><strong>Total</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><%=image_tag @deal.deal_images.first.image.url(:thumb), class: "img-responsive" %></td>
+                                <td><%= @deal.title %></td>
+                                <td class="text-center"><%= @deal.price %></td>
+                                <td class="text-center">
+                                    <%= form_tag(edit_deal_order_path(@deal, @order), method: :get, class: 'form-horizontal') do %>
+                                    <div class="form-group">
+                                        <%= label_tag :quantity, 'Quantity:', class: 'col-lg-2 control-label' %>
+                                        <%= submit_tag "Change", class: 'btn btn-primary btn-sm' %>
+                                        <div class="col-xs-4">
+                                            <%= number_field_tag :quantity, @order.quantity , min: 1, class: 'form-control input-sm',  placeholder: "Quantity" %>
+                                        </div>
+                                    </div>
+                                    <%end%>
+                                </td>
+                                <td class="text-right"><%= number_to_currency(@order.calculate_total_price , unit: "$")%></td>
+                            </tr>
+                            <tr>
+                                <td class="highrow"></td>
+                                <td class="highrow"></td>
+                                <td class="highrow"></td>
+                                <td class="highrow text-center"><strong>Total</strong></td>
+                                <td class="highrow text-right"><%= number_to_currency(@order.calculate_total_price , unit: "$") %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <%= form_tag order_charges_path(@order) do %>
+                <article>
+                    <% if flash[:error].present? %>
+                    <div id="error_explanation">
+                        <p><%= flash[:error] %></p>
+                    </div>
+                    <% end %>
+                </article>
+                <div class="col-lg-offset-5">
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+                    data-description="Deal amount "
+                    data-amount= <%= @order.calculate_total_price * 100 %>
+                    data-locale="auto"></script>
+                </div>
+                <% end %>
+            </div>
+        </div>
+        <%= link_to 'Cancel Order', deal_order_path(@deal, @order),method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %>
+    </div>
+</div>
+</body>
+</html>

@@ -8,18 +8,27 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  
   get "/signup", to: 'users#new'
+  
   resource :users, only: [:create]
+  
   get '/deals/index/', to: 'deals#index'
   get '/deals/past/', to: 'deals#past'
   get '/deals/search/', to: 'deals#search'
-  resources :deals, only: [:show]
+  
+  resources :deals, only: [:show] do
+    resources :orders, only: [:new, :edit, :destroy]
+  end
+  
   resources :categories, only: [] do
     member do
       get 'deals'
     end
   end
+
   get 'admin' => 'admin#index'
+  
   namespace :admin do
     resources :deals do
       member do
@@ -27,6 +36,10 @@ Rails.application.routes.draw do
         get 'unpublish'
       end
     end
+  end
+
+  resources :orders do
+    resources :charges
   end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

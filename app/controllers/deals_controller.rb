@@ -1,7 +1,7 @@
 class DealsController < ApplicationController
 
   def index
-    @deals = Deal.published.paginate(:page => params[:page])
+    @deals = Deal.live.paginate(:page => params[:page])
   end
 
   def past

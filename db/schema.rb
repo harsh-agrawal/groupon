@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602133700) do
+ActiveRecord::Schema.define(version: 20160613125353) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20160602133700) do
     t.integer  "merchant_id",          limit: 4,                                             null: false
     t.datetime "created_at",                                                                 null: false
     t.datetime "updated_at",                                                                 null: false
+    t.integer  "sold_quantity",        limit: 4,                             default: 0
+    t.integer  "lock_version",         limit: 4,                             default: 0
   end
 
   add_index "deals", ["category_id"], name: "index_deals_on_category_id", using: :btree
@@ -75,6 +77,32 @@ ActiveRecord::Schema.define(version: 20160602133700) do
 
   add_index "merchants", ["email"], name: "index_merchants_on_email", unique: true, using: :btree
 
+  create_table "orders", force: :cascade do |t|
+    t.integer "user_id",  limit: 4,             null: false
+    t.integer "deal_id",  limit: 4,             null: false
+    t.integer "quantity", limit: 4, default: 1, null: false
+    t.integer "status",   limit: 4, default: 0
+  end
+
+  add_index "orders", ["deal_id"], name: "index_orders_on_deal_id", using: :btree
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
+
+  create_table "payment_transactions", force: :cascade do |t|
+    t.string  "charge_id",          limit: 255
+    t.integer "amount",             limit: 4
+    t.string  "currency",           limit: 255
+    t.string  "stripe_customer_id", limit: 255
+    t.string  "stripe_token",       limit: 255
+    t.string  "stripe_token_type",  limit: 255
+    t.string  "description",        limit: 255
+    t.string  "stripe_email",       limit: 255
+    t.integer "user_id",            limit: 4
+    t.integer "order_id",           limit: 4
+  end
+
+  add_index "payment_transactions", ["order_id"], name: "index_payment_transactions_on_order_id", using: :btree
+  add_index "payment_transactions", ["user_id"], name: "index_payment_transactions_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                   limit: 255,                 null: false
     t.string   "last_name",                    limit: 255,                 null: false
@@ -100,4 +128,8 @@ ActiveRecord::Schema.define(version: 20160602133700) do
   add_foreign_key "deals", "categories"
   add_foreign_key "deals", "merchants"
   add_foreign_key "locations", "deals"
+  add_foreign_key "orders", "deals"
+  add_foreign_key "orders", "users"
+  add_foreign_key "payment_transactions", "orders"
+  add_foreign_key "payment_transactions", "users"
 end
