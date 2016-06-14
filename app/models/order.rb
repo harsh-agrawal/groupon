@@ -1,4 +1,4 @@
-  # == Schema Information
+# == Schema Information
 #
 # Table name: orders
 #
@@ -21,7 +21,8 @@
 
 class Order < ActiveRecord::Base
 
-  has_one :payment_transaction
+  self.per_page = 10
+  has_one :payment_transaction, dependent: :destroy
   belongs_to :user
   belongs_to :deal
 
@@ -36,19 +37,19 @@ class Order < ActiveRecord::Base
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
   scope :deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
 
-  #FIXME_AB: on save, linked to status
-  validates_with QuantityValidator, if: :check_status
+  validates_with QuantityValidator, if: :qty_validation_required?
 
-  after_save :update_sold_quantity, if: :deal_bought
+  before_save :update_sold_quantity, if: :deal_bought
+  #FIXME_AB: add a validation that order can not be placed for past deal
+  #FIXME_AB: add placed_at for order callback
 
-  def check_status
+  def qty_validation_required?
     ["pending", "paid"].include? status
   end
 
   def deal_bought
-    if changes && changes[:status]
-      status_changed = changes[:status]
-      status_changed[0] == "pending" && status_changed[1] == "paid"
+    if status_changed?
+      status_was == "pending" && status == "paid"
     end
   end
 
@@ -59,6 +60,12 @@ class Order < ActiveRecord::Base
   private
 
   def update_sold_quantity
+    #FIXME_AB: deal.increase_sold_qty_by(quantity)
+    # def increase_sold_qty_by(qty)
+    #   sold_quantity+=qty
+    #   save(false)
+    # end
+
     updated_sold_quantity = deal.sold_quantity + quantity
     deal.update_attribute(:sold_quantity, updated_sold_quantity)
   end

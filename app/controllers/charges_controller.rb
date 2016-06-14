@@ -2,6 +2,7 @@ class ChargesController < ApplicationController
 
   before_action :set_order, only: [:create]
 
+  #FIXME_AB: remove this
   def new
   end
 
@@ -17,18 +18,25 @@ class ChargesController < ApplicationController
     charge = Stripe::Charge.create(
       :customer    => customer.id,
       :amount      => @amount,
-      :description => "Deal #{@order.deal.title} bought.",
+      :description => "Deal #{@order.deal.title} by merchant ${@order.deal.merchant.name} bought with quantity #{@order.quantity} at total price of #{@order.calculate_total_price}.",
       :currency    => 'usd'
     )
 
-    debugger
     set_transaction_details(charge)
     @order.status = "paid"
-    @order.save
+    #FIXME_AB: before save
+    @order.placed_at = Time.current
+    if !@order.save
+      re = Stripe::Refund.create(
+        charge: charge
+      )
+    end
+    #FIXME_AB: if success, take user to the order's show page with a flash message. Display all the order details with transaction info
 
   rescue Stripe::CardError => e
     flash[:error] = e.message
-    redirect_to new_charge_path
+    #FIXME_AB: Take user to the edit page
+    redirect_to new_deal_order_path(@order.deal)
   end
 
   private
@@ -41,7 +49,6 @@ class ChargesController < ApplicationController
   end
 
   def set_transaction_details(charge)
-    # @transaction = Transaction.new(transaction_params(charge))
     @transaction = @order.build_payment_transaction(transaction_params(charge))
     @transaction.user = current_user
     @transaction.save!

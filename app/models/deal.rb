@@ -32,7 +32,7 @@
 #
 
 class Deal < ActiveRecord::Base
-
+#FIXME_AB: display sold_quantity in admin
   self.per_page = 10
 
   validates :title, presence: true
@@ -60,7 +60,7 @@ class Deal < ActiveRecord::Base
   validates :max_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: ->(deal) { deal.min_qty } }, if: ("publishable? && min_qty?")
   validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
 
-
+  validates :sold_quantity, numericality: { only_integer: true, less_than_or_equal_to: ->(deal) { deal.max_qty } }
   scope :published, -> { where(publishable: true) }
   scope :live, -> (time = Time.current){ where("start_time <= ?", time).where("? <= expire_time ", time) }
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
@@ -96,7 +96,7 @@ class Deal < ActiveRecord::Base
   end
   
   def sold_out?
-    sold_quantity == max_qty 
+    sold_quantity >= max_qty 
   end
 
   def quantity_available

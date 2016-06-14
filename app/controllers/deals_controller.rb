@@ -14,7 +14,8 @@ class DealsController < ApplicationController
   end
 
   def show
-    @deal = Deal.find_by_id(params[:id])
+    #FIXME_AB: update the deal's show page as discussed 
+    @deal = Deal.published.find_by_id(params[:id])
     if @deal.nil?
       redirect_to deals_index_path, alert: "No such Deal exists."
     end

@@ -15,15 +15,14 @@
           <h4 class="pull-right"><%= number_to_currency(@deal.price, unit: "$") %></h4>
           <h3><%= @deal.title %></h3>
           <p class="lead text-success"> by <%= @deal.merchant.name %></p>
+          <hr>
+          <p><b> Maximum Quantities : </b><%= @deal.max_qty %></p>
+          <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
+          <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
+          <hr>
           <p><b> Description : </b><%= @deal.description %></p>
           <hr>
           <p><b> Instructions : </b><%= @deal.instructions %></p>
-          <hr>
-          <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
-          <hr>
-          <p><b> Maximum Quantities : </b><%= @deal.max_qty %></p>
-          <hr>
-          <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
           <% if @deal.expired? %>
           <h3 class= "text-center"> <span class="label label-danger"> Deal Expired </span></h3>
           <% elsif @deal.sold_out? %>

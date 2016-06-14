@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
   # You can have the root of your site routed with "root"
+
+  #FIXME_AB: make it default to live deals
   root 'welcome#index'
   
   get "/signup", to: 'users#new'
@@ -18,7 +20,7 @@ Rails.application.routes.draw do
   get '/deals/search/', to: 'deals#search'
   
   resources :deals, only: [:show] do
-    resources :orders, only: [:new, :edit, :destroy]
+    resources :orders, only: [:new, :index, :edit, :update, :destroy]
   end
   
   resources :categories, only: [] do

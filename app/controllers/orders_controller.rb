@@ -1,10 +1,17 @@
 class OrdersController < ApplicationController
 
   before_action :authenticate
-  before_action :set_deal, only: [:new, :edit, :destroy]
-  before_action :set_order, only: [:edit, :destroy]
+  #FIXME_AB: we don' need deal for destroy an order
+  before_action :set_deal, only: [:new, :edit, :update, :destroy]
+  before_action :set_pending_order, only: [:edit, :update, :destroy]
+
+  def index
+    #FIXME_AB: need to eager load data, check log
+    @orders = current_user.orders.paginate(page: params[:page])
+  end
 
   def new
+    current_user.orders.pending.destroy_all
     @order = @deal.orders.new
     @order.user = current_user
     if @order.save
@@ -15,10 +22,14 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    if params[:quantity]
-      @order.quantity = params[:quantity]
-    end 
-    if !@order.save
+  end
+
+  def update
+    @order.quantity = params[:quantity]
+    if @order.save
+      #FIXME_AB: show success message
+      redirect_to edit_deal_order_path(@deal, @order)
+    else
       render :edit
     end
   end
@@ -34,16 +45,13 @@ class OrdersController < ApplicationController
   private
 
   def set_deal
-    #FIXME_AB: no check for deal status
     @deal = Deal.live.find_by_id(params[:deal_id])
     if @deal.nil?
       redirect_to deals_index_path, alert: "No such Deal exists."
     end
   end
 
-  #FIXME_AB: set_pending_order
-  def set_order
-    #FIXME_AB: current_user.orders.pending.find_by
+  def set_pending_order
     @order = current_user.orders.pending.find_by_id(params[:id])
     if @order.nil?
       redirect_to deals_index_path, alert: "No such Order exists."

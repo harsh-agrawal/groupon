@@ -10,7 +10,7 @@ class QuantityValidator < ActiveModel::Validator
         record.errors.add(:deals, " per customer allowed is only #{ record.deal.max_qty_per_customer }.")
       end
     else
-      record.errors.add(:deals, "Sold Out")
+      record.errors.add(:base, "Deal has been sold out")
     end
   end
 end

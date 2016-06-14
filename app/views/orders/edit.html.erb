@@ -26,10 +26,10 @@
                                 <td><%= @deal.title %></td>
                                 <td class="text-center"><%= @deal.price %></td>
                                 <td class="text-center">
-                                    <%= form_tag(edit_deal_order_path(@deal, @order), method: :get, class: 'form-horizontal') do %>
+                                    <%= form_tag(deal_order_path(@deal, @order), method: :patch, class: 'form-horizontal') do %>
                                     <div class="form-group">
                                         <%= label_tag :quantity, 'Quantity:', class: 'col-lg-2 control-label' %>
-                                        <%= submit_tag "Change", class: 'btn btn-primary btn-sm' %>
+                                        <%= submit_tag "Save", class: 'btn btn-primary btn-sm' %>
                                         <div class="col-xs-4">
                                             <%= number_field_tag :quantity, @order.quantity , min: 1, class: 'form-control input-sm',  placeholder: "Quantity" %>
                                         </div>
