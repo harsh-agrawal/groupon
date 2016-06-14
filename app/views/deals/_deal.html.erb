@@ -3,7 +3,7 @@
       <%= link_to deal_path(deal) do %>
       <%=image_tag deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "No Image to display." %>
       <%end %>
-      <h3 class="pull-right"><%= number_to_currency(deal.price, unit: "Rs.") %></h3>
+      <h3 class="pull-right"><%= number_to_currency(deal.price, unit: "$") %></h3>
    </div>
    
    <div class = "caption">

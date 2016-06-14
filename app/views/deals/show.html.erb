@@ -1,32 +1,48 @@
+<% if @order %>
+<%= render partial: "shared/errors", locals: { object: @order} %>
+<% end %>
 <% content_for :head do %>
 <%= javascript_include_tag 'slideshow' %>
 <% end %>
 <div class="container">
   <div class="row">
-    <div class="col-md-3">
-      <p class="lead">Cart</p>
-      <div class="list-group">
-      </div>
-    </div>
     <div class="col-md-9">
       <div class="thumbnail">
         <div class="center-block" data-behaviour = 'slideshow'>
           <%= render partial: 'deal_images/slideshow_deal_image', collection: @deal.deal_images %>
         </div>
         <div class="caption-full">
-          <h4 class="pull-right"><%= number_to_currency(@deal.price, unit: "Rs.") %></h4>
+          <h4 class="pull-right"><%= number_to_currency(@deal.price, unit: "$") %></h4>
           <h3><%= @deal.title %></h3>
+          <p class="lead text-success"> by <%= @deal.merchant.name %></p>
+          <hr>
+          <p><b> Maximum Quantities : </b><%= @deal.max_qty %></p>
+          <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
+          <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
+          <hr>
           <p><b> Description : </b><%= @deal.description %></p>
           <hr>
           <p><b> Instructions : </b><%= @deal.instructions %></p>
-          <hr>
-          <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
-          <hr>
-          <p><b> Maximum Quantities : </b><%= @deal.max_qty %></p>
-          <hr>
-          <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
+          <% if @deal.expired? %>
+          <h3 class= "text-center"> <span class="label label-danger"> Deal Expired </span></h3>
+          <% elsif @deal.sold_out? %>
+          <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
+          <% elsif @deal.live? %>
+          <p class= "text-center"><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></p>
+          <% end %>
         </div>
       </div>
+    </div>
+    <div class="col-md-3">
+      <% if @deal.expired? %>
+      <h3> <span class="label label-danger"> Deal Expired </span></h3>
+      <% elsif @deal.sold_out? %>
+      <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
+      <% elsif @deal.live? %>
+      <p ><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></p>
+      <h3> <b> You Bought  </b> <%= current_user.orders.deal(@deal.id).paid.size if signed_in?%> </h3>
+      <h3> <b> Deals Remainig  </b> <%= @deal.quantity_available %> </h3>
+      <% end %>
     </div>
   </div>
 </div>

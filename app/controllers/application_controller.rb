@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :signed_in?, :sign_in
+  helper_method :signed_in?, :sign_in, :authenticate, :current_user
 
   before_action :login_from_cookie, unless: :signed_in?
 
@@ -16,6 +16,12 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def authenticate
+    if !signed_in?
+      redirect_to :back, alert: 'Please Login and Come Back to buy this Deal.'
+    end
+  end
 
   def current_user
     if session[:user_id]
