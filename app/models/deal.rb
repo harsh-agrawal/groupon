@@ -62,7 +62,7 @@ class Deal < ActiveRecord::Base
 
   validates :sold_quantity, numericality: { only_integer: true, less_than_or_equal_to: ->(deal) { deal.max_qty } }
   scope :published, -> { where(publishable: true) }
-  scope :live, -> (time = Time.current){ where("start_time <= ?", time).where("? <= expire_time ", time) }
+  scope :live, -> (time = Time.current){ published.where("start_time <= ?", time).where("? <= expire_time ", time) }
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
   scope :search, ->(keyword) { published.includes(:locations).where("lower(title) LIKE ? OR lower(locations.city) LIKE ?","%#{keyword.downcase}%", "%#{keyword.downcase}%" ).references(:locations)}
 
@@ -70,7 +70,8 @@ class Deal < ActiveRecord::Base
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
   has_many :deal_images, dependent: :destroy, validate: false
-  has_many :orders
+  #FIXME_AB: dependent?
+  has_many :orders, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
@@ -101,6 +102,15 @@ class Deal < ActiveRecord::Base
 
   def quantity_available
     max_qty - sold_quantity
+  end
+
+  def increase_sold_qty_by(quantity)
+    updated_sold_quantity = sold_quantity + quantity
+    update_attribute(:sold_quantity, updated_sold_quantity)
+  end
+
+  def remaining_deals_to_valid
+    min_qty - sold_quantity
   end
 
   private

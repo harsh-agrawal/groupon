@@ -3,11 +3,7 @@ class ChargesController < ApplicationController
   before_action :set_order, only: [:create]
 
   #FIXME_AB: remove this
-  def new
-  end
-
   def create
-    # Amount in cents
     @amount = (@order.calculate_total_price * 100).to_i
 
     customer = Stripe::Customer.create(
@@ -25,7 +21,6 @@ class ChargesController < ApplicationController
     set_transaction_details(charge)
     @order.status = "paid"
     #FIXME_AB: before save
-    @order.placed_at = Time.current
     if !@order.save
       re = Stripe::Refund.create(
         charge: charge
@@ -36,7 +31,7 @@ class ChargesController < ApplicationController
   rescue Stripe::CardError => e
     flash[:error] = e.message
     #FIXME_AB: Take user to the edit page
-    redirect_to new_deal_order_path(@order.deal)
+    redirect_to edit_deal_order_path(@order.deal)
   end
 
   private
@@ -44,7 +39,7 @@ class ChargesController < ApplicationController
   def set_order
     @order = current_user.orders.pending.find_by_id(params[:order_id])
     if @order.nil?
-      redirect_to deals_index_path, alert: "No such Order exists."
+      redirect_to deals_path, alert: "No such Order exists."
     end
   end
 

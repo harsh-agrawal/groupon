@@ -39,7 +39,8 @@ class User < ActiveRecord::Base
 
   scope :verified, -> { where.not(verified_at: nil) }
 
-  has_many :orders
+  #FIXME_AB: dependent?
+  has_many :orders, dependent: :restrict_with_error
   has_many :payment_transactions
 
   before_validation :set_password_required, on: :create

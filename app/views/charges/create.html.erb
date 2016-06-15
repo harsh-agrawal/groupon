@@ -1,2 +1,6 @@
 <% #FIXME_AB: this would be conditional,  -%>
-<h2>Thanks, you paid <strong><%= @order.calculate_total_price %> </strong>!</h2>
+<% if @order.errors.any? %>
+  <h2>Sorry, your order could not be processed and a refund for <%= number_to_currency(@order.calculate_total_price) %> has been initiated</h2>
+<% else %>
+  <%= render template: "orders/show" %>
+<% end %>

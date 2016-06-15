@@ -32,14 +32,17 @@ class Order < ActiveRecord::Base
   validates :user, presence: true
   validates :deal, presence: true
   validates :status, presence: true
+  validates_with QuantityValidator, if: :qty_validation_required?
+  validates_with LiveDealValidator
 
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
+  scope :not_pending, -> { where.not( "status = ?", Order.statuses[:pending] )}
   scope :deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
 
-  validates_with QuantityValidator, if: :qty_validation_required?
-
   before_save :update_sold_quantity, if: :deal_bought
+  before_save :set_order_placed_at, if: :deal_bought
+
   #FIXME_AB: add a validation that order can not be placed for past deal
   #FIXME_AB: add placed_at for order callback
 
@@ -59,15 +62,19 @@ class Order < ActiveRecord::Base
 
   private
 
+  def set_order_placed_at
+    self.placed_at = Time.current
+  end
+
   def update_sold_quantity
     #FIXME_AB: deal.increase_sold_qty_by(quantity)
     # def increase_sold_qty_by(qty)
     #   sold_quantity+=qty
     #   save(false)
     # end
-
-    updated_sold_quantity = deal.sold_quantity + quantity
-    deal.update_attribute(:sold_quantity, updated_sold_quantity)
+    deal.increase_sold_qty_by(quantity)
+    # updated_sold_quantity = deal.sold_quantity + quantity
+    # deal.update_attribute(:sold_quantity, updated_sold_quantity)
   end
 
 end

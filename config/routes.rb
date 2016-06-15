@@ -9,18 +9,18 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
 
   #FIXME_AB: make it default to live deals
-  root 'welcome#index'
+  root 'deals#index'
   
   get "/signup", to: 'users#new'
   
   resource :users, only: [:create]
   
-  get '/deals/index/', to: 'deals#index'
+  # get '/deals/index/', to: 'deals#index'
   get '/deals/past/', to: 'deals#past'
   get '/deals/search/', to: 'deals#search'
   
-  resources :deals, only: [:show] do
-    resources :orders, only: [:new, :index, :edit, :update, :destroy]
+  resources :deals, only: [:index, :show] do
+    resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
   
   resources :categories, only: [] do

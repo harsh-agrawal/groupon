@@ -1,0 +1,1 @@
+Time::DATE_FORMATS[:detailed]  = ->(time) { time.strftime("%d %B %Y, %l:%M:%S%P") }
