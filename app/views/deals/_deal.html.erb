@@ -1,7 +1,7 @@
 <div class = "col-sm-6 col-md-3">
    <div class = "thumbnail">
       <%= link_to deal_path(deal) do %>
-      <%=image_tag deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "No Image to display." %>
+      <%=image_tag deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "deal.deal_images.first.image_file_name" %>
       <%end %>
       <h3 class="pull-right"><%= number_to_currency(deal.price, unit: "$") %></h3>
    </div>
@@ -10,7 +10,12 @@
       <h4><b><%= deal.title %></b></h4>
       <p><%= truncate(strip_tags(deal.description), length: 100)%></p>
       <p>
-         <%= link_to 'View Deal', deal_path(deal), class: "btn btn-default" %><br/>
+      <% if deal.expired? %>
+            <h3><span class="label label-danger pull-right"> Deal Expired </span></h3>
+      <% elsif deal.sold_out? %>
+            <h3><span class="label label-danger pull-right"> Sold Out</span></h3>
+      <% end %>
+         <%= link_to 'View Deal', deal_path(deal), class: "btn btn-default" %>
       </p>
    </div>
 </div>

@@ -16,6 +16,11 @@
                 <td class="text-center"><strong>Deal Quantity</strong></td>
                 <td><strong>Order Status</strong></td>
                 <td><strong>Order Placed At</strong></td>
+                <td><strong>Card Brand</strong></td>
+                <td><strong>Card Exp. Month</strong></td>
+                <td><strong>Card Exp. Year</strong></td>
+                <td><strong>Last Four Digits</strong></td>
+
                 <td class="text-right"><strong>Total</strong></td>
               </tr>
             </thead>
@@ -23,18 +28,24 @@
               <tr>
                 <td><%= @order.id %></td>
                 <td>
-                  <%=image_tag @order.deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "No Image to display." %>
+                  <%=image_tag @order.deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "#{ @order.deal.deal_images.first.image_file_name }" %>
                 </td>
                 <td><%= @order.deal.title %></td>
-                <% #FIXME_AB: number_to_currency everywhere -%>
                 <td class="text-center"><%= number_to_currency(@order.deal.price , unit: "$") %></td>
                 <td class="text-center"><%= @order.quantity %></td>
                 <td class="text-center"><%= @order.status %></td>
-                <% #FIXME_AB: make you own time format order.placed_at.to_s(:detailed) -%>
                 <td class="text-center"><%= @order.placed_at.to_s(:detailed) %></td>
+                <td class="text-center"><%= @order.payment_transactions.first.card_brand %></td>
+                <td class="text-center"><%= @order.payment_transactions.first.exp_month %></td>
+                <td class="text-center"><%= @order.payment_transactions.first.exp_year %></td>
+                <td class="text-center"><%= @order.payment_transactions.first.last_four_digits %></td>
                 <td class="text-right"><%= number_to_currency(@order.calculate_total_price , unit: "$")%></td>
               </tr>
               <tr>
+                <td class="highrow"></td>
+                <td class="highrow"></td>
+                <td class="highrow"></td>
+                <td class="highrow"></td>
                 <td class="highrow"></td>
                 <td class="highrow"></td>
                 <td class="highrow"></td>

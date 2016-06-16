@@ -1,3 +1,4 @@
+<% #FIXME_AB: buy button should not come if user can not buy the deal. show approp. message -%>
 <% if @order %>
 <%= render partial: "shared/errors", locals: { object: @order} %>
 <% end %>
@@ -14,22 +15,18 @@
         <div class="caption-full">
           <h4 class="pull-right"><%= number_to_currency(@deal.price, unit: "$") %></h4>
           <h3><%= @deal.title %></h3>
+          <%= link_to deals_merchant_path(@deal.merchant) do %>
           <p class="lead text-success"> by <%= @deal.merchant.name %></p>
+          <% end %>
           <hr>
           <p><b> Maximum Quantities : </b><%= @deal.max_qty %></p>
           <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
           <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
           <hr>
-          <p><b> Description : </b><%= @deal.description %></p>
+          <% #FIXME_AB: read about simple_format fuction and use it for desc and inst -%>
+          <p><b> Description : </b><%= simple_format( @deal.description ) %></p>
           <hr>
-          <p><b> Instructions : </b><%= @deal.instructions %></p>
-          <% if @deal.expired? %>
-          <h3 class= "text-center"> <span class="label label-danger"> Deal Expired </span></h3>
-          <% elsif @deal.sold_out? %>
-          <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
-          <% elsif @deal.live? %>
-          <p class= "text-center"><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></p>
-          <% end %>
+          <p><b> Instructions : </b><%= simple_format( @deal.instructions ) %></p>
         </div>
       </div>
     </div>
@@ -39,11 +36,16 @@
       <% elsif @deal.sold_out? %>
         <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
       <% elsif @deal.live? %>
-        <p ><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></p>
-        <h3> <b> Deals Remaining  </b> <%= @deal.quantity_available %> </h3>
-        <h3> <b> Deals Sold  </b> <%= @deal.sold_quantity %> </h3>
-        <% if @deal.remaining_deals_to_valid > 0 %>
-          <h3> <b> Need </b> <%= @deal.remaining_deals_to_valid %> <b> more Deals to activate the deal. </b></h3>
+        <% if current_user && current_user.qty_can_be_purchased(@deal) <= 0 %>
+          <h3 class= "text-center"> <span class="btn btn-info disabled"> Buy </span></h3>
+          <h5> <b> Limit Reached of max. quantity per customer. </b> </h5>
+        <% else %>
+          <p ><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></p>
+        <% end %>
+        <h5> <b> Quantity Remaining  </b> <%= @deal.quantity_available %> </h5>
+        <h5> <b> Quantity Sold  </b> <%= @deal.sold_quantity %> </h5>
+        <% if @deal.remaining_quantity_to_activate > 0 %>
+          <h5> <b> Need </b> <%= @deal.remaining_quantity_to_activate %> <b> more quantitites to be sold to activate the deal. </b></h5>
         <% end %>
       <% end %>
     </div>

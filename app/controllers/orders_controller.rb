@@ -1,25 +1,26 @@
 class OrdersController < ApplicationController
 
   before_action :authenticate
-  #FIXME_AB: we don' need deal for destroy an order
   before_action :set_deal, only: [:new, :edit, :update]
   before_action :set_pending_order, only: [:edit, :update, :destroy]
   before_action :set_paid_order, only: [:show]
 
   def index
-    #FIXME_AB: need to eager load data, check log
-    user = User.where(id: current_user.id).includes(:orders).first
-    @orders = user.orders.not_pending.paginate(page: params[:page])
+    #FIXME_AB: placed
+    @orders = current_user.orders.placed.includes(deal: [:deal_images]).paginate(page: params[:page])
   end
 
   def new
     current_user.orders.pending.destroy_all
     @order = @deal.orders.new
     @order.user = current_user
+    @order.price = @deal.price
     if @order.save
-      redirect_to edit_deal_order_path(@deal, @order)
+      #FIXME_AB: flash message
+      redirect_to edit_deal_order_path(@deal, @order), alert: "Select quantity for your order."
     else
-      render "deals/show"
+      #FIXME_AB: redirect to deal's show page with message
+      redirect_to deal_path(@deal), alert: "Order could not be placed."
     end
   end
 
@@ -29,8 +30,7 @@ class OrdersController < ApplicationController
   def update
     @order.quantity = params[:quantity]
     if @order.save
-      #FIXME_AB: show success message
-      redirect_to edit_deal_order_path(@deal, @order), alert: " Successfully added #{ @order.quantity } quantity to your order."
+      redirect_to edit_deal_order_path(@deal, @order), alert: "Successfully added #{ @order.quantity } quantity to your order."
     else
       render :edit
     end
@@ -58,14 +58,15 @@ class OrdersController < ApplicationController
   end
 
   def set_pending_order
-    @order = current_user.orders.pending.find_by_id(params[:id])
+    @order = current_user.orders.pending.find_by(id: params[:id])
     if @order.nil?
       redirect_to deals_path, alert: "No such Order exists."
     end
   end
 
   def set_paid_order
-    @order = current_user.orders.not_pending.find_by_id(params[:id])
+    #FIXME_AB: orders.placed
+    @order = current_user.orders.placed.find_by_id(params[:id])
     if @order.nil?
       redirect_to deals_path, alert: "No such Order exists."
     end
