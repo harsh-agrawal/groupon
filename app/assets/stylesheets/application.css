@@ -13,3 +13,22 @@
  *= require_self
  *= require bootstrap
  */
+
+div.deal_thumbnail{
+  height: 150px;
+}
+
+div.deal_caption{
+  height: 140px;
+}
+
+.large-font{
+  font-size: 130% !important;
+}
+
+div.deal_box{
+  margin: 20px;
+  border: 5px solid #ddd;
+  border-radius: 5px 5px 5px;
+  box-shadow: #aaa 5px 5px 5px 5px;
+}

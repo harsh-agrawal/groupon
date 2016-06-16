@@ -25,8 +25,8 @@
             <% if current_page?(deals_path) %>
             <li class="active">
               <% else %>
-              <li>
-                <% end %>
+            <li>
+            <% end %>
                 <%= link_to 'Live Deals', deals_path %> <span class="sr-only">(current)</span></li>
                 <% if current_page?(past_deals_path) %>
                 <li class="active">
@@ -73,6 +73,7 @@
             </div>
           </nav>
           <%= render partial: "shared/flash" %>
-          <%= yield %>
-        </body>
+<div class = 'container'>  `
+        <%= yield %>
+        </div>        </body>
       </html>

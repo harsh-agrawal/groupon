@@ -23,9 +23,8 @@
 
 class Order < ActiveRecord::Base
 
-  #FIXME_AB: save price with order
   self.per_page = 10
-  #FIXME_AB: this will be many
+
   has_many :payment_transactions  , dependent: :destroy
   belongs_to :user
   belongs_to :deal
@@ -43,6 +42,7 @@ class Order < ActiveRecord::Base
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
   scope :placed, -> { where("status = ? OR status = ?", Order.statuses[:paid], Order.statuses["processed"] ) }
+  #FIXME_AB: :by_deal
   scope :deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
 
   before_save :update_sold_quantity, if: :deal_bought
@@ -59,7 +59,6 @@ class Order < ActiveRecord::Base
   end
 
   def calculate_total_price
-    #FIXME_AB: user order's price
     quantity * price
   end
 

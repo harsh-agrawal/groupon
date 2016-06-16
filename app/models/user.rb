@@ -40,7 +40,6 @@ class User < ActiveRecord::Base
   scope :verified, -> { where.not(verified_at: nil) }
 
   has_many :orders, dependent: :restrict_with_error
-  #FIXME_AB: dependent?
   has_many :payment_transactions, dependent: :restrict_with_error
 
   before_validation :set_password_required, on: :create
@@ -89,7 +88,6 @@ class User < ActiveRecord::Base
   end
 
   def qty_can_be_purchased(deal)
-    #FIXME_AB: you should count total quantities for deal in placed orders. not orders count
     deal.max_qty_per_customer - orders.deal(deal.id).placed.sum(:quantity)
   end
 

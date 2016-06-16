@@ -14,8 +14,6 @@ Rails.application.routes.draw do
 
   resource :users, only: [:create]
 
-  #FIXME_AB: collection of deals resources
-
   resources :deals, only: [:index, :show] do
     collection do
       get 'search'
@@ -48,7 +46,6 @@ Rails.application.routes.draw do
   end
 
   resources :orders do
-    #FIXME_AB: we only need :create
     resources :charges, only: [:create]
   end
   # Example of regular route:

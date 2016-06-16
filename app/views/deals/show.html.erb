@@ -1,7 +1,3 @@
-<% #FIXME_AB: buy button should not come if user can not buy the deal. show approp. message -%>
-<% if @order %>
-<%= render partial: "shared/errors", locals: { object: @order} %>
-<% end %>
 <% content_for :head do %>
 <%= javascript_include_tag 'slideshow' %>
 <% end %>
@@ -23,7 +19,6 @@
           <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
           <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
           <hr>
-          <% #FIXME_AB: read about simple_format fuction and use it for desc and inst -%>
           <p><b> Description : </b><%= simple_format( @deal.description ) %></p>
           <hr>
           <p><b> Instructions : </b><%= simple_format( @deal.instructions ) %></p>

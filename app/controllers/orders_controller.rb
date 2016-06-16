@@ -6,20 +6,18 @@ class OrdersController < ApplicationController
   before_action :set_paid_order, only: [:show]
 
   def index
-    #FIXME_AB: placed
-    @orders = current_user.orders.placed.includes(deal: [:deal_images]).paginate(page: params[:page])
+    @orders = current_user.orders.placed.includes(deal: [:deal_images]).order(placed_at: :desc).paginate(page: params[:page])
   end
 
   def new
     current_user.orders.pending.destroy_all
     @order = @deal.orders.new
     @order.user = current_user
+    #FIXME_AB: set price in before_save
     @order.price = @deal.price
     if @order.save
-      #FIXME_AB: flash message
       redirect_to edit_deal_order_path(@deal, @order), alert: "Select quantity for your order."
     else
-      #FIXME_AB: redirect to deal's show page with message
       redirect_to deal_path(@deal), alert: "Order could not be placed."
     end
   end
@@ -65,7 +63,6 @@ class OrdersController < ApplicationController
   end
 
   def set_paid_order
-    #FIXME_AB: orders.placed
     @order = current_user.orders.placed.find_by_id(params[:id])
     if @order.nil?
       redirect_to deals_path, alert: "No such Order exists."

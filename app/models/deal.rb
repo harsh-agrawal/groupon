@@ -107,7 +107,6 @@ class Deal < ActiveRecord::Base
     update_attribute(:sold_quantity, updated_sold_quantity)
   end
 
-  #FIXME_AB: remaining_quantity_to_activate
   def remaining_quantity_to_activate
     min_qty - sold_quantity
   end

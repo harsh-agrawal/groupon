@@ -14,7 +14,6 @@ class DealsController < ApplicationController
   end
 
   def show
-    #FIXME_AB: make merchant nemat clickable, which should list all deals by same merchant. paginated
     @deal = Deal.published.find_by_id(params[:id])
     if @deal.nil?
       redirect_to deals_path, alert: "No such Deal exists."
