@@ -39,8 +39,8 @@ class User < ActiveRecord::Base
 
   scope :verified, -> { where.not(verified_at: nil) }
 
-  has_many :orders
-  has_many :payment_transactions
+  has_many :orders, dependent: :restrict_with_error
+  has_many :payment_transactions, dependent: :restrict_with_error
 
   before_validation :set_password_required, on: :create
   before_create :set_and_generate_verification_token, if: '!admin'
@@ -88,7 +88,7 @@ class User < ActiveRecord::Base
   end
 
   def qty_can_be_purchased(deal)
-    deal.max_qty_per_customer - orders.deal(deal.id).paid.size
+    deal.max_qty_per_customer - orders.deal(deal.id).placed.sum(:quantity)
   end
 
   private

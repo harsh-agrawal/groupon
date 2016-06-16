@@ -22,39 +22,58 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><%= link_to 'Live Deals', deals_index_path %> <span class="sr-only">(current)</span></li>
-            <li><%= link_to 'Past Deals', deals_past_path %></li>
-            <li><%= link_to 'My Orders', orders_path %></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Categories <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <% categories = Category.all %>
-                <% categories.each do |category| %>
-                <li> <%= link_to category.name, deals_category_path(category) %></li>
-                <% end %>
-              </ul>
-            </li>
-          </ul>
-          <%= form_tag(deals_search_path, method: :get, class: 'navbar-form navbar-left') do %>
-          <div class="form-group">
-            <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: "Search"%>
-          </div>
-          <%= submit_tag "Submit", class: 'btn btn-default' %>
-          <%end%>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Link</a></li>
-            <% if signed_in? %>
-            <li><%= link_to 'Logout', sessions_path, method: :delete %></li>
-            <% else %>
-            <li><%= link_to 'Login', new_sessions_path %></li>
-            <li><%= link_to 'SignUp', signup_path %></li>
+            <% if current_page?(deals_path) %>
+            <li class="active">
+              <% else %>
+            <li>
             <% end %>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <%= render partial: "shared/flash" %>
-  <%= yield %>
-</body>
-</html>
+                <%= link_to 'Live Deals', deals_path %> <span class="sr-only">(current)</span></li>
+                <% if current_page?(past_deals_path) %>
+                <li class="active">
+                  <% else %>
+                  <li>
+                    <% end %>
+                  <%= link_to 'Past Deals', past_deals_path %></li>
+                  <% if signed_in? %>
+                  <% if current_page?(orders_path) %>
+                  <li class="active">
+                    <% else %>
+                    <li>
+                      <% end %>
+                    <%= link_to 'My Orders', orders_path %></li>
+                    <% end %>
+                    <% #FIXME_AB: highlight current page -%>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Categories <span class="caret"></span></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <% categories = Category.all %>
+                        <% categories.each do |category| %>
+                        <li> <%= link_to category.name, deals_category_path(category) %></li>
+                        <% end %>
+                      </ul>
+                    </li>
+                  </ul>
+                  <%= form_tag(search_deals_path, method: :get, class: 'navbar-form navbar-left') do %>
+                  <div class="form-group">
+                    <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: "Search"%>
+                  </div>
+                  <%= submit_tag "Submit", class: 'btn btn-default' %>
+                  <%end%>
+                  <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <% if signed_in? %>
+                    <li><%= link_to 'Logout', sessions_path, method: :delete %></li>
+                    <% else %>
+                    <li><%= link_to 'Login', new_sessions_path %></li>
+                    <li><%= link_to 'SignUp', signup_path %></li>
+                    <% end %>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          <%= render partial: "shared/flash" %>
+<div class = 'container'>  `
+        <%= yield %>
+        </div>        </body>
+      </html>

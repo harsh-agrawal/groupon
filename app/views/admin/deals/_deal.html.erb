@@ -1,12 +1,15 @@
 <tr class = 'text-center' >
   <td>
-    <%= deal_counter + 1 %>
+    <%= deal.id %>
   </td>
   <td >
     <%= deal.title %>
   </td>
   <td>
     <%= deal.price %>
+  </td>
+  <td>
+    <%= deal.sold_quantity %>
   </td>
   <td>
     <% if deal.start_time %>

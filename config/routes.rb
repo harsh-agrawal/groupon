@@ -8,21 +8,26 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
   # You can have the root of your site routed with "root"
 
-  #FIXME_AB: make it default to live deals
-  root 'welcome#index'
-  
+  root 'deals#index'
+
   get "/signup", to: 'users#new'
-  
+
   resource :users, only: [:create]
-  
-  get '/deals/index/', to: 'deals#index'
-  get '/deals/past/', to: 'deals#past'
-  get '/deals/search/', to: 'deals#search'
-  
-  resources :deals, only: [:show] do
-    resources :orders, only: [:new, :index, :edit, :update, :destroy]
+
+  resources :deals, only: [:index, :show] do
+    collection do
+      get 'search'
+      get 'past'
+    end
+    resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
-  
+
+  resources :merchants, only: [] do
+    member do
+      get 'deals'
+    end
+  end
+
   resources :categories, only: [] do
     member do
       get 'deals'
@@ -30,7 +35,7 @@ Rails.application.routes.draw do
   end
 
   get 'admin' => 'admin#index'
-  
+
   namespace :admin do
     resources :deals do
       member do
@@ -41,7 +46,7 @@ Rails.application.routes.draw do
   end
 
   resources :orders do
-    resources :charges
+    resources :charges, only: [:create]
   end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

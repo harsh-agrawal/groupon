@@ -1,20 +1,16 @@
 <div class="container">
-    <tr>
-        <% #FIXME_AB: This will be linked to order's show page. -%>
-        <% #FIXME_AB: two space indentation  -%>
-        <td><%= order.id %></td>
-        <td>
-            <%= link_to deal_path(order.deal) do %>
-            <%=image_tag order.deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "No Image to display." %>
-            <%end %>
-        </td>
-        <td><%= order.deal.title %></td>
-        <% #FIXME_AB: number_to_currency everywhere -%>
-        <td class="text-center"><%= order.deal.price %></td>
-        <td class="text-center"><%= order.quantity %></td>
-        <td class="text-center"><%= order.status %></td>
-        <% #FIXME_AB: make you own time format order.placed_at.to_s(:detailed) -%>
-        <td class="text-center"><%= order.placed_at.strftime("%d %B %Y, %l:%M:%S%P") if order.placed_at? %></td>
-        <td class="text-right"><%= number_to_currency(order.calculate_total_price , unit: "$")%></td>
-    </tr>
+  <tr>
+    <td><%= link_to order.id, order %></td>
+    <td>
+      <%= link_to order_path(order) do %>
+      <%=image_tag order.deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "#{ order.deal.deal_images.first.image_file_name }" %>
+      <% end %>
+    </td>
+    <td><%= order.deal.title %></td>
+    <td class="text-center"><%= number_to_currency(order.deal.price , unit: "$") %></td>
+    <td class="text-center"><%= order.quantity %></td>
+    <td class="text-center"><%= order.status %></td>
+    <td class="text-center"><%= order.placed_at.to_s(:detailed) if order.placed_at? %></td>
+    <td class="text-right"><%= number_to_currency(order.calculate_total_price , unit: "$")%></td>
+  </tr>
 </div>

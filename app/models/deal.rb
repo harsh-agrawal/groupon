@@ -32,7 +32,6 @@
 #
 
 class Deal < ActiveRecord::Base
-#FIXME_AB: display sold_quantity in admin
   self.per_page = 10
 
   validates :title, presence: true
@@ -59,10 +58,10 @@ class Deal < ActiveRecord::Base
   end
   validates :max_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: ->(deal) { deal.min_qty } }, if: ("publishable? && min_qty?")
   validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
-
   validates :sold_quantity, numericality: { only_integer: true, less_than_or_equal_to: ->(deal) { deal.max_qty } }
+
   scope :published, -> { where(publishable: true) }
-  scope :live, -> (time = Time.current){ where("start_time <= ?", time).where("? <= expire_time ", time) }
+  scope :live, -> (time = Time.current){ published.where("start_time <= ?", time).where("? <= expire_time ", time) }
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
   scope :search, ->(keyword) { published.includes(:locations).where("lower(title) LIKE ? OR lower(locations.city) LIKE ?","%#{keyword.downcase}%", "%#{keyword.downcase}%" ).references(:locations)}
 
@@ -70,7 +69,7 @@ class Deal < ActiveRecord::Base
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
   has_many :deal_images, dependent: :destroy, validate: false
-  has_many :orders
+  has_many :orders, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
@@ -94,13 +93,22 @@ class Deal < ActiveRecord::Base
   def expired?
     expire_time < Time.current
   end
-  
+
   def sold_out?
-    sold_quantity >= max_qty 
+    sold_quantity >= max_qty
   end
 
   def quantity_available
     max_qty - sold_quantity
+  end
+
+  def increase_sold_qty_by(quantity)
+    updated_sold_quantity = sold_quantity + quantity
+    update_attribute(:sold_quantity, updated_sold_quantity)
+  end
+
+  def remaining_quantity_to_activate
+    min_qty - sold_quantity
   end
 
   private

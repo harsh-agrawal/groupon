@@ -19,7 +19,6 @@
 #
 #  fk_rails_c14235c781  (deal_id => deals.id)
 #
-
 class Location < ActiveRecord::Base
   validates :address, presence: true
   validates :city, presence: true
