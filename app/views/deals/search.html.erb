@@ -1,8 +1,10 @@
 <div class="page-header">
-<h2> Search Results for '<%= @keyword %>' </h2>
+<h2> Search Results for '<%= @keyword %>'... </h2>
 </div>  
 <hr>
 <div class = "row">
   <%= render @deals %>
 </div>
-<%= will_paginate @posts %>
+<div class="page-footer col-md-offset-5">
+<%= will_paginate @deals %>
+</div>
