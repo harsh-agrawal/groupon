@@ -36,7 +36,6 @@ class User < ActiveRecord::Base
                                                                                      message: "Invalid Format"}
   validates :password, length: { minimum: 6 }, if: "password_required.present?"
 
-
   scope :verified, -> { where.not(verified_at: nil) }
 
   has_many :orders, dependent: :restrict_with_error
@@ -88,7 +87,7 @@ class User < ActiveRecord::Base
   end
 
   def qty_can_be_purchased(deal)
-    deal.max_qty_per_customer - orders.deal(deal.id).placed.sum(:quantity)
+    deal.max_qty_per_customer - orders.by_deal(deal.id).placed.sum(:quantity)
   end
 
   private

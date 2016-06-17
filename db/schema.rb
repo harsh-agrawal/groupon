@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160615121955) do
+ActiveRecord::Schema.define(version: 20160616113306) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 20160615121955) do
   end
 
   add_index "categories", ["name"], name: "index_categories_on_name", unique: true, using: :btree
+
+  create_table "coupons", force: :cascade do |t|
+    t.integer  "order_id",    limit: 4
+    t.string   "code",        limit: 255
+    t.datetime "redeemed_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "coupons", ["order_id"], name: "index_coupons_on_order_id", using: :btree
 
   create_table "deal_images", force: :cascade do |t|
     t.integer  "deal_id",            limit: 4
@@ -50,6 +60,7 @@ ActiveRecord::Schema.define(version: 20160615121955) do
     t.datetime "updated_at",                                                                 null: false
     t.integer  "sold_quantity",        limit: 4,                             default: 0
     t.integer  "lock_version",         limit: 4,                             default: 0
+    t.boolean  "processed",                                                  default: false
   end
 
   add_index "deals", ["category_id"], name: "index_deals_on_category_id", using: :btree
@@ -130,6 +141,7 @@ ActiveRecord::Schema.define(version: 20160615121955) do
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
   add_index "users", ["verification_token"], name: "index_users_on_verification_token", using: :btree
 
+  add_foreign_key "coupons", "orders"
   add_foreign_key "deal_images", "deals"
   add_foreign_key "deals", "categories"
   add_foreign_key "deals", "merchants"

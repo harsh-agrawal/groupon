@@ -26,6 +26,7 @@ class Order < ActiveRecord::Base
   self.per_page = 10
 
   has_many :payment_transactions  , dependent: :destroy
+  has_many :coupons, dependent: :restrict_with_error
   belongs_to :user
   belongs_to :deal
 
@@ -37,19 +38,25 @@ class Order < ActiveRecord::Base
   validates :deal, presence: true
   validates :status, presence: true
   validates_with QuantityValidator, if: :qty_validation_required?
-  validates_with LiveDealValidator
+  validates_with LiveDealValidator, unless: :coupon_generated?
 
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
   scope :placed, -> { where("status = ? OR status = ?", Order.statuses[:paid], Order.statuses["processed"] ) }
-  #FIXME_AB: :by_deal
-  scope :deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
+  scope :by_deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
 
   before_save :update_sold_quantity, if: :deal_bought
   before_save :set_order_placed_at, if: :deal_bought
 
   def qty_validation_required?
     ["pending", "paid"].include? status
+  end
+
+  def coupon_generated?
+    if status_changed?
+      status_was == "paid" && status == "processed"
+    end
+
   end
 
   def deal_bought

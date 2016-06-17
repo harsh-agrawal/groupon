@@ -1,0 +1,12 @@
+<p>
+  Hello <%= @order.user.first_name %>,
+</p>
+
+You're receiving this email because you orderd on Groupon with order no. <%= @order.id %> 
+
+Your Coupon Codes are : 
+
+<ul>
+<%= render @order.coupons %>
+
+</ul>
