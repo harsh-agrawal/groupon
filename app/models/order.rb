@@ -2,13 +2,15 @@
 #
 # Table name: orders
 #
-#  id        :integer          not null, primary key
-#  user_id   :integer          not null
-#  deal_id   :integer          not null
-#  quantity  :integer          default(1), not null
-#  status    :integer          default(0)
-#  placed_at :datetime
-#  price     :integer          not null
+#  id         :integer          not null, primary key
+#  user_id    :integer          not null
+#  deal_id    :integer          not null
+#  quantity   :integer          default(1), not null
+#  status     :integer          default(0)
+#  placed_at  :datetime
+#  price      :integer          not null
+#  created_at :datetime
+#  updated_at :datetime
 #
 # Indexes
 #
@@ -30,7 +32,7 @@ class Order < ActiveRecord::Base
   belongs_to :user
   belongs_to :deal
 
-  enum status: [:pending, :paid, :processed]
+  enum status: [:pending, :paid, :processed, :refunded]
 
   validates :quantity, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
@@ -38,25 +40,29 @@ class Order < ActiveRecord::Base
   validates :deal, presence: true
   validates :status, presence: true
   validates_with QuantityValidator, if: :qty_validation_required?
-  validates_with LiveDealValidator, unless: :coupon_generated?
+  #FIXME_AB: if: live_deal_check_required?
+  validates_with LiveDealValidator, if: :live_deal_check_required?
 
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
-  scope :placed, -> { where("status = ? OR status = ?", Order.statuses[:paid], Order.statuses["processed"] ) }
+  #FIXME_AB: use in. where(status: [])
+  scope :placed, -> { where("status = ? OR status = ? OR status = ?", Order.statuses[:paid], Order.statuses["processed"], Order.statuses[:refunded] ) }
   scope :by_deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
 
   before_save :update_sold_quantity, if: :deal_bought
   before_save :set_order_placed_at, if: :deal_bought
+  before_validation :set_order_price
+
+  after_commit :send_coupons, if: :order_processed?
+  after_commit :send_refund_message, if: :order_refunded?
+  after_save :refund_amount, if: :order_refund?
 
   def qty_validation_required?
     ["pending", "paid"].include? status
   end
 
-  def coupon_generated?
-    if status_changed?
-      status_was == "paid" && status == "processed"
-    end
-
+  def live_deal_check_required?
+    pending? || paid?
   end
 
   def deal_bought
@@ -80,7 +86,62 @@ class Order < ActiveRecord::Base
     save
   end
 
+  def mark_refunded(transaction_details)
+    transaction = payment_transactions.build(transaction_details)
+    transaction.user = user
+    transaction.save!
+  end
+
   private
+
+  def set_order_price
+  	self.price = deal.price
+  end
+
+  def order_refund?
+    if status_changed?
+      status_was == "paid" && status == "refunded"
+    end
+  end
+
+  def order_refunded?
+    if previous_changes && previous_changes[:status]
+      changes = previous_changes[:status]
+      changes[0] == 'paid' && changes[1] == 'refunded'
+    end
+  end
+
+  def set_transaction_details(refund)
+    transaction_details = {}
+    transaction_details[:refund_id] = refund.id
+    transaction_details[:charge_id] = refund.charge
+    transaction_details[:amount] = refund.amount
+    transaction_details[:currency] = refund.currency
+    transaction_details
+  end
+
+  def order_processed?
+    if previous_changes && previous_changes[:status]
+      changes = previous_changes[:status]
+      changes[0] == 'paid' && changes[1] == 'processed'
+    end
+  end
+
+  def refund_amount
+    charge = payment_transactions.order(created_at: :asc).first.charge_id
+    refund = Stripe::Refund.create(
+      charge: charge
+    )
+    mark_refunded(set_transaction_details(refund))
+  end
+
+  def send_refund_message
+    UserNotifier.refund_mail(self).deliver_now
+  end
+
+  def send_coupons
+    UserNotifier.coupon_mail(self).deliver_now
+  end
 
   def set_order_placed_at
     self.placed_at = Time.current

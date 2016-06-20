@@ -66,7 +66,8 @@ class Deal < ActiveRecord::Base
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
   scope :search, ->(keyword) { published.includes(:locations).where("lower(title) LIKE ? OR lower(locations.city) LIKE ?","%#{keyword.downcase}%", "%#{keyword.downcase}%" ).references(:locations)}
   scope :not_processed, -> { where.not(processed: true) }
-  scope :valid_deals, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) >= deals.min_qty") }
+  scope :for_coupon_processing, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) >= deals.min_qty") }
+  scope :for_refund_processing, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) < deals.min_qty") }
 
   belongs_to :category
   belongs_to :merchant
@@ -78,7 +79,6 @@ class Deal < ActiveRecord::Base
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
   before_validation :check_if_deal_can_be_updated?, if: ("publishable?"), unless: :deal_processing?
-  after_commit :send_coupons, if: :deal_processed?
 
   def publish
     self.publishable = true
@@ -122,20 +122,8 @@ class Deal < ActiveRecord::Base
       processed_was == false && processed == true
     end
   end
-
-
-  def deal_processed?
-    if previous_changes && previous_changes[:processed]
-      changes = previous_changes[:processed]
-      changes[0] == false && changes[1] == true
-    end
-  end
-
-  def send_coupons
-    orders.each do |order|
-      UserNotifier.coupon_mail(order).deliver_now
-    end
-  end
+  #FIXME_AB: not required
+  #FIXME_AB: aftercommit in order.rb
 
   def check_if_deal_can_be_updated?
     if expired?

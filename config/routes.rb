@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get '/password_reset/:token', to: 'password_resets#new', as: 'reset_password'
   resource :password_reset, only: [:create]
   resource :sessions, only: [:new, :create, :destroy]
+  resource :merchant_sessions, only: [:new, :create, :destroy]
   resource :password_request, only: [:new, :create]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -22,7 +23,7 @@ Rails.application.routes.draw do
     resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
 
-  resources :merchants, only: [] do
+  resources :merchants, only: [:new, :create] do
     member do
       get 'deals'
     end
@@ -36,6 +37,14 @@ Rails.application.routes.draw do
 
   get 'admin' => 'admin#index'
 
+  namespace :merchant do
+    resources :coupons do
+      collection do
+        post 'redeem'
+      end
+    end
+    resources :deals, only: [:index, :show]
+  end
   namespace :admin do
     resources :deals do
       member do

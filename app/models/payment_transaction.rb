@@ -13,10 +13,13 @@
 #  stripe_email       :string(255)
 #  user_id            :integer
 #  order_id           :integer
-#  card_brand         :string(255)      not null
-#  exp_month          :integer          not null
-#  exp_year           :integer          not null
-#  last_four_digits   :integer          not null
+#  refund_id          :string(255)
+#  card_brand         :string(255)
+#  exp_month          :integer
+#  exp_year           :integer
+#  last_four_digits   :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 # Indexes
 #

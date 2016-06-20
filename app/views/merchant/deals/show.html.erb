@@ -1,0 +1,43 @@
+<% content_for :head do %>
+<%= javascript_include_tag 'slideshow' %>
+<% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="thumbnail">
+        <div class="center-block" data-behaviour = 'slideshow'>
+          <%= render partial: 'deal_images/slideshow_deal_image', collection: @deal.deal_images %>
+        </div>
+        <div class="caption-full">
+          <h4 class="pull-right"><%= number_to_currency(@deal.price, unit: "$") %></h4>
+          <h3><%= @deal.title %></h3>
+          <%= link_to deals_merchant_path(@deal.merchant) do %>
+          <p class="lead text-success"> by <%= @deal.merchant.name %></p>
+          <% end %>
+          <hr>
+          <p><b> Maximum Quantities : </b><%= @deal.max_qty %></p>
+          <p><b> Maximum Quantity Per Customer : </b><%= @deal.max_qty_per_customer %></p>
+          <p><b> Minimum Quantity Required to Redeem : </b><%= @deal.min_qty %></p>
+          <hr>
+          <p><b> Description : </b><%= simple_format( @deal.description ) %></p>
+          <hr>
+          <p><b> Instructions : </b><%= simple_format( @deal.instructions ) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <% if @deal.expired? %>
+        <h3> <span class="label label-danger"> Deal Expired </span></h3>
+      <% elsif @deal.sold_out? %>
+        <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
+      <% elsif @deal.live? %>
+        <h3 class= "text-center"> <span class="label label-info"> Live </span></h3>
+        <% end %>
+        <h5> <b> Quantity Remaining  </b> <%= @deal.quantity_available %> </h5>
+        <h5> <b> Quantity Sold  </b> <%= @deal.sold_quantity %> </h5>
+        <% if @deal.remaining_quantity_to_activate > 0 %>
+          <h5> <b> Need </b> <%= @deal.remaining_quantity_to_activate %> <b> more quantitites to be sold to activate the deal. </b></h5>
+        <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<p>
+  Hello <%= @order.user.first_name %>,
+</p>
+
+Sorry! The deal <%= @order.deal.title %> is  not through, and we are refunding <%= @order.calculate_total_price %> against the order <%= @order.id %>.
+
+Please visit ordershow[link] for more details
+

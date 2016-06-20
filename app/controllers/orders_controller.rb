@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
   before_action :set_paid_order, only: [:show]
 
   def index
-    @orders = current_user.orders.placed.includes(deal: [:deal_images]).order(placed_at: :desc).paginate(page: params[:page])
+    @orders = current_user.orders.includes(deal: [:deal_images]).order(placed_at: :desc).paginate(page: params[:page])
   end
 
   def new
@@ -14,7 +14,6 @@ class OrdersController < ApplicationController
     @order = @deal.orders.new
     @order.user = current_user
     #FIXME_AB: set price in before_save
-    @order.price = @deal.price
     if @order.save
       redirect_to edit_deal_order_path(@deal, @order), alert: "Select quantity for your order."
     else

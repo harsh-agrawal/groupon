@@ -12,9 +12,15 @@ class UserNotifier < ApplicationMailer
     mail to: user.email, subject: 'Password Reset Link'
   end
 
+  def refund_mail(order)
+    @order = order
+    mail to: @order.user.email, subject: "Refund amount for #{ @order.id }"
+  end
+
   def coupon_mail(order)
     @order = order
-    mail to: order.user.email, subject: 'Coupons For Your Order'
+    #FIXME_AB: change subject to order/deal specific
+    mail to: @order.user.email, subject: "Coupons For Your Order #{ @order.id }"
   end
 
 end

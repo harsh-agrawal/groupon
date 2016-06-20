@@ -1,0 +1,20 @@
+<div class = "col-sm-6 col-md-3 deal_box">
+   <div class = "thumbnail deal_thumbnail">
+      <%= link_to merchant_deal_path(deal) do %>
+      <%=image_tag deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "deal.deal_images.first.image_file_name" %>
+      <%end %>
+   </div>
+   
+   <div class = "caption deal_caption">
+      <h4><b><%= deal.title %></b></h4>
+      <p><%= truncate(strip_tags(deal.description), length: 100)%></p>
+   </div>
+   <p>
+      <% if deal.expired? %>
+      <span class="label label-danger pull-right"> Expired </span>
+      <% elsif deal.sold_out? %>
+      <span class="label label-danger pull-right"> Sold</span>
+      <% end %>
+      <span class="label label-info pull-left large-font"><%= number_to_currency(deal.price, unit: "$") %></span>
+   </p>
+</div>

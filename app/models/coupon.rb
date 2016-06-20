@@ -19,12 +19,15 @@
 #
 
 class Coupon < ActiveRecord::Base
+  #FIXME_AB: we'll search coupons based on code so index it unique index
   belongs_to :order
 
   before_create :generate_token
 
+  #FIXME_AB: validations?
+
   def random_token
-    SecureRandom.urlsafe_base64.to_s
+    SecureRandom.hex(5)
   end
 
   def generate_token
