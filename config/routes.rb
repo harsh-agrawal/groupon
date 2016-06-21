@@ -26,6 +26,12 @@ Rails.application.routes.draw do
 
   #FIXME_AB: make a route for /merchant which should take user to  merchant default page
 
+  resources :merchants, only: [] do
+    member do
+      get 'deals'
+    end
+  end
+
   resources :categories, only: [] do
     member do
       get 'deals'
@@ -55,7 +61,7 @@ Rails.application.routes.draw do
   resources :orders do
     resources :charges, only: [:create]
   end
-  
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   # Example of named route that can be invoked with purchase_url(id: product.id)
