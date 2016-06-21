@@ -74,6 +74,7 @@ class Deal < ActiveRecord::Base
   has_many :locations, dependent: :destroy, validate: false
   has_many :deal_images, dependent: :destroy, validate: false
   has_many :orders, dependent: :restrict_with_error
+  has_many :coupons, through: :orders
 
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank

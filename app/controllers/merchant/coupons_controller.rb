@@ -1,23 +1,15 @@
 class Merchant::CouponsController < Merchant::BaseController
 
   def new
-
   end
 
   def redeem
-    @coupons = current_merchant.coupons
-    if @coupons.any?
-      @coupons.each do |coupon|
-        if (coupon.code == params[:code] && redeemed_at.blank?)
-          coupon.redeemed_at = Time.current
-          coupon.save
-          flash[:alert] = "Congratulation! Your coupon is valid."
-        else
-          flash[:alert] = "Sorry. Invalid Coupon"
-        end
-      end
+    coupon = current_merchant.coupons.where("coupons.code = ?", params[:code]).first
+    if coupon.present? && coupon.redeemed_at.blank?
+      coupon.set_redeemed_at
+      flash[:notice] = "Congratulation! Your coupon is valid."
     else
-      flash[:alert] = "No coupons for you."
+      flash[:alert] = "Sorry. Invalid Coupon"
     end
     redirect_to new_merchant_coupon_path
   end

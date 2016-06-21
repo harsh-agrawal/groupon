@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :signed_in?, :sign_in, :authenticate, :current_user, :current_merchant
+  helper_method :signed_in?, :sign_in, :authenticate, :current_user
 
   before_action :login_from_cookie, unless: :signed_in?
 
@@ -16,12 +16,6 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  def current_merchant
-    if session[:merchant_id]
-      @current_merchant ||=  Merchant.find(session[:merchant_id])
-    end
-  end
 
   def authenticate
     if !signed_in?

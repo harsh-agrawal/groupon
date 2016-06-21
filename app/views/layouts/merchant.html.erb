@@ -4,6 +4,7 @@
     <title>Groupon</title>
     <%= stylesheet_link_tag 'merchant/merchant', media: 'all' %>
     <%= javascript_include_tag 'merchant/merchant' %>
+    <%= yield :head %>
     <%= csrf_meta_tags %>
   </head>
   <body>

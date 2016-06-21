@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
 
-  resources :merchants, only: [:new, :create] do
+  resources :merchants, only: [] do
     member do
       get 'deals'
     end

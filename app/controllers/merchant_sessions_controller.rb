@@ -1,4 +1,4 @@
-class MerchantSessionsController < ApplicationController
+class MerchantSessionsController < Merchant::BaseController
 
   before_action :ensure_merchant, except: [:destroy]
 

@@ -11,6 +11,7 @@
 #
 # Indexes
 #
+#  index_coupons_on_code      (code) UNIQUE
 #  index_coupons_on_order_id  (order_id)
 #
 # Foreign Keys
@@ -23,7 +24,9 @@ class Coupon < ActiveRecord::Base
   belongs_to :order
 
   before_create :generate_token
-
+  validates :code, presence: true, uniqueness: true
+  validates :order, presence: true
+  scope :redeemed, -> { where(redeemed_at: nil) }
   #FIXME_AB: validations?
 
   def random_token
@@ -38,6 +41,11 @@ class Coupon < ActiveRecord::Base
         break
       end
     end
-
   end
+
+  def set_redeemed_at
+    self.redeemed_at = Time.current
+    save
+  end
+
 end

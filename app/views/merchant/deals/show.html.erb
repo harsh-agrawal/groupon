@@ -27,17 +27,35 @@
     </div>
     <div class="col-md-3">
       <% if @deal.expired? %>
-        <h3> <span class="label label-danger"> Deal Expired </span></h3>
+      <h3> <span class="label label-danger"> Deal Expired </span></h3>
       <% elsif @deal.sold_out? %>
-        <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
+      <h3 class= "text-center"> <span class="label label-danger"> Sold Out </span></h3>
       <% elsif @deal.live? %>
-        <h3 class= "text-center"> <span class="label label-info"> Live </span></h3>
-        <% end %>
-        <h5> <b> Quantity Remaining  </b> <%= @deal.quantity_available %> </h5>
-        <h5> <b> Quantity Sold  </b> <%= @deal.sold_quantity %> </h5>
-        <% if @deal.remaining_quantity_to_activate > 0 %>
-          <h5> <b> Need </b> <%= @deal.remaining_quantity_to_activate %> <b> more quantitites to be sold to activate the deal. </b></h5>
-        <% end %>
+      <h3 class= "text-center"> <span class="label label-info"> Live </span></h3>
+      <% end %>
+      <h5> <b> Quantity Remaining  </b> <%= @deal.quantity_available %> </h5>
+      <h5> <b> Quantity Sold  </b> <%= @deal.sold_quantity %> </h5>
+      <% if @deal.remaining_quantity_to_activate > 0 %>
+      <h5> <b> Need </b> <%= @deal.remaining_quantity_to_activate %> <b> more quantitites to be sold to activate the deal. </b></h5>
+      <% end %>
+      <% @coupons = @deal.coupons.redeemed %>
+      <% if @coupons.present? %>
+      <h4>Redeemed Coupons </h4>
+      <table class="table table-striped table-hover table-bordered">
+        <thead>
+          <tr>
+            <td>#</td>
+            <td><strong> Coupon Code</strong></td>
+            <td class="text-center"><strong> Redeemed At </strong></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <%= render @coupons %>
+          </tr>
+        </tbody>
+      </table>
+      <% end %>
     </div>
   </div>
 </div>

@@ -14,13 +14,13 @@ class UserNotifier < ApplicationMailer
 
   def refund_mail(order)
     @order = order
-    mail to: @order.user.email, subject: "Refund amount for #{ @order.id }"
+    mail to: @order.user.email, subject: "Refund amount for #{ @order.id } of deal #{ @order.deal.title }"
   end
 
   def coupon_mail(order)
     @order = order
     #FIXME_AB: change subject to order/deal specific
-    mail to: @order.user.email, subject: "Coupons For Your Order #{ @order.id }"
+    mail to: @order.user.email, subject: "Coupons For Your Order #{ @order.id } of deal #{ @order.deal.title }"
   end
 
 end
