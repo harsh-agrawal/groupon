@@ -123,8 +123,6 @@ class Deal < ActiveRecord::Base
       processed_was == false && processed == true
     end
   end
-  #FIXME_AB: not required
-  #FIXME_AB: aftercommit in order.rb
 
   def check_if_deal_can_be_updated?
     if expired?

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get '/activation/:token', to: 'users#account_activation', as: 'account_activation'
   get '/password_reset/:token', to: 'password_resets#new', as: 'reset_password'
+  get '/merchant', to: 'merchant/coupons#new'
   resource :password_reset, only: [:create]
   resource :sessions, only: [:new, :create, :destroy]
   resource :merchant_sessions, only: [:new, :create, :destroy]
@@ -23,11 +24,7 @@ Rails.application.routes.draw do
     resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
 
-  resources :merchants, only: [] do
-    member do
-      get 'deals'
-    end
-  end
+  #FIXME_AB: make a route for /merchant which should take user to  merchant default page
 
   resources :categories, only: [] do
     member do
@@ -38,13 +35,14 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#index'
 
   namespace :merchant do
-    resources :coupons do
+    resources :coupons, only: [:new] do
       collection do
         post 'redeem'
       end
     end
     resources :deals, only: [:index, :show]
   end
+
   namespace :admin do
     resources :deals do
       member do
@@ -57,6 +55,7 @@ Rails.application.routes.draw do
   resources :orders do
     resources :charges, only: [:create]
   end
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   # Example of named route that can be invoked with purchase_url(id: product.id)

@@ -11,7 +11,7 @@
         <div class="caption-full">
           <h4 class="pull-right"><%= number_to_currency(@deal.price, unit: "$") %></h4>
           <h3><%= @deal.title %></h3>
-          <%= link_to deals_merchant_path(@deal.merchant) do %>
+          <%= link_to merchant_deal_path(@deal.merchant) do %>
           <p class="lead text-success"> by <%= @deal.merchant.name %></p>
           <% end %>
           <hr>

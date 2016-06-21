@@ -40,7 +40,6 @@ class Order < ActiveRecord::Base
   validates :deal, presence: true
   validates :status, presence: true
   validates_with QuantityValidator, if: :qty_validation_required?
-  #FIXME_AB: if: live_deal_check_required?
   validates_with LiveDealValidator, if: :live_deal_check_required?
 
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }

@@ -20,14 +20,15 @@
 #
 
 class Coupon < ActiveRecord::Base
-  #FIXME_AB: we'll search coupons based on code so index it unique index
   belongs_to :order
 
   before_create :generate_token
-  validates :code, presence: true, uniqueness: true
+  #FIXME_AB: uniqueness case?
+  before_save :can_be_redeem?
+  validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :order, presence: true
-  scope :redeemed, -> { where(redeemed_at: nil) }
-  #FIXME_AB: validations?
+
+  scope :redeemed, -> { where.not(redeemed_at: nil) }
 
   def random_token
     SecureRandom.hex(5)
@@ -43,9 +44,18 @@ class Coupon < ActiveRecord::Base
     end
   end
 
-  def set_redeemed_at
+  #FIXME_AB: redeem
+  def redeem
+    #FIXME_AB: you should check if coupon can be redeem by before_save
     self.redeemed_at = Time.current
     save
   end
+
+  private
+
+  def can_be_redeem?
+    redeemed_at_was == nil && redeemed_at != nil
+  end
+
 
 end

@@ -13,7 +13,6 @@ class OrdersController < ApplicationController
     current_user.orders.pending.destroy_all
     @order = @deal.orders.new
     @order.user = current_user
-    #FIXME_AB: set price in before_save
     if @order.save
       redirect_to edit_deal_order_path(@deal, @order), alert: "Select quantity for your order."
     else
