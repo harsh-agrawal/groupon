@@ -44,8 +44,8 @@ class Order < ActiveRecord::Base
 
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
-  #FIXME_AB: use in. where(status: [])
-  scope :placed, -> { where("status = ? OR status = ? OR status = ?", Order.statuses[:paid], Order.statuses["processed"], Order.statuses[:refunded] ) }
+  #FIXME_AB: use in. where(status: [Order.statuses[:paid], Order.statuses["processed"], Order.statuses[:refunded]])
+  scope :placed, -> { where(status: [Order.statuses[:paid], Order.statuses["processed"], Order.statuses[:refunded]]) }
   scope :by_deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
 
   before_save :update_sold_quantity, if: :deal_bought

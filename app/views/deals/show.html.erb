@@ -26,7 +26,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3" data-behaviour = "count-container" data-url="<%= update_count_deal_path(@deal.id) %>">
+    <% #FIXME_AB: you should pass object to url helpers not id. read about to_param method -%>
+    <div class="col-md-3" data-behaviour = "count-container" data-url="<%= refresh_deal_path(@deal) %>">
       <% if @deal.expired? %>
         <h3> <span class="label label-danger"> Deal Expired </span></h3>
       <% elsif @deal.sold_out? %>

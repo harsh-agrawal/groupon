@@ -13,7 +13,8 @@ class DealsController < ApplicationController
     @deals = Deal.search(@keyword).paginate(page: params[:page])
   end
 
-  def update_count
+  #FIXME_AB: refresh
+  def refresh
     @deal = Deal.published.find_by(id: params[:id])
   end
 

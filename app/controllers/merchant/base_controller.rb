@@ -8,8 +8,9 @@ class Merchant::BaseController < ApplicationController
 
   def ensure_merchant
     if !current_merchant
-      flash[:notice] = "Your are not allowed to access this page."
-      redirect_to root_url
+      flash[:notice] = "You need to be logged as merchant to access this page"
+      #FIXME_AB: take him to merchant login page
+      redirect_to new_merchant_sessions_path
     end
   end
 

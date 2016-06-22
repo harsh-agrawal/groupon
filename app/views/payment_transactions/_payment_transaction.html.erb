@@ -1,8 +1,0 @@
-<tr>
-<td class="text-center"><%= payment_transaction.id %></td>
-<td class="text-center"><%= number_to_currency(payment_transaction.order.calculate_total_price , unit: "$") %></td>
-<td class="text-center"><%= payment_transaction.card_brand %></td>
-<td class="text-center"><%= payment_transaction.exp_month %></td>
-<td class="text-center"><%= payment_transaction.exp_year %></td>
-<td class="text-center"><%= payment_transaction.last_four_digits %></td>
-</tr>

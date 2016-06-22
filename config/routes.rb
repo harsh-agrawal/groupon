@@ -22,12 +22,10 @@ Rails.application.routes.draw do
       get 'past'
     end
     member do
-      get 'update_count'
+      get 'refresh'
     end
     resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
-
-  #FIXME_AB: make a route for /merchant which should take user to  merchant default page
 
   resources :merchants, only: [] do
     member do

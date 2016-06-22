@@ -23,8 +23,6 @@ class Coupon < ActiveRecord::Base
   belongs_to :order
 
   before_create :generate_token
-  #FIXME_AB: uniqueness case?
-  before_save :can_be_redeem?
   validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :order, presence: true
 
@@ -44,17 +42,10 @@ class Coupon < ActiveRecord::Base
     end
   end
 
-  #FIXME_AB: redeem
   def redeem
-    #FIXME_AB: you should check if coupon can be redeem by before_save
+    return false if redeemed_at.present?
     self.redeemed_at = Time.current
     save
-  end
-
-  private
-
-  def can_be_redeem?
-    redeemed_at_was == nil && redeemed_at != nil
   end
 
 
