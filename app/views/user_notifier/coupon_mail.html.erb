@@ -1,0 +1,16 @@
+<p>
+  Hello <%= @order.user.first_name %>,
+</p>
+
+Congratulations! The deal <%= @order.deal.title %> is through, and we are sending 5 coupons against the order <%= @order.id %>.
+
+Your Coupon Codes are : 
+
+<ul>
+<%= render @order.coupons %>
+
+</ul>
+
+
+Please visit ordershow[link] for more details
+

@@ -1,6 +1,7 @@
 <% content_for :head do %>
 <%= javascript_include_tag 'slideshow' %>
 <% end %>
+<%= javascript_include_tag 'polling' %>
 <div class="container">
   <div class="row">
     <div class="col-md-9">
@@ -25,7 +26,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <% #FIXME_AB: you should pass object to url helpers not id. read about to_param method -%>
+    <div class="col-md-3" data-behaviour = "count-container" data-url="<%= refresh_deal_path(@deal) %>">
       <% if @deal.expired? %>
         <h3> <span class="label label-danger"> Deal Expired </span></h3>
       <% elsif @deal.sold_out? %>
@@ -35,10 +37,10 @@
           <h3 class= "text-center"> <span class="btn btn-info disabled"> Buy </span></h3>
           <h5> <b> Limit Reached of max. quantity per customer. </b> </h5>
         <% else %>
-          <p ><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></p>
+          <h3 data-behaviour = 'deal-status'><%= link_to 'Buy', new_deal_order_path(@deal), class: "btn btn-info" %></h3>
         <% end %>
-        <h5> <b> Quantity Remaining  </b> <%= @deal.quantity_available %> </h5>
-        <h5> <b> Quantity Sold  </b> <%= @deal.sold_quantity %> </h5>
+        <h5 data-behaviour = 'remaining-quantity' > <b> Quantity Remaining </b> <span data-behaviour = 'quantity-remaining'> <%= @deal.quantity_available %> </span></h5>
+        <h5 data-behaviour = 'sold-quantity' > <b> Quantity Sold </b> <span data-behaviour = 'quantity-sold'> <%= @deal.sold_quantity %> </span></h5>
         <% if @deal.remaining_quantity_to_activate > 0 %>
           <h5> <b> Need </b> <%= @deal.remaining_quantity_to_activate %> <b> more quantitites to be sold to activate the deal. </b></h5>
         <% end %>

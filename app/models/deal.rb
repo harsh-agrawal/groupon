@@ -19,6 +19,7 @@
 #  updated_at           :datetime         not null
 #  sold_quantity        :integer          default(0)
 #  lock_version         :integer          default(0)
+#  processed            :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -51,7 +52,7 @@ class Deal < ActiveRecord::Base
     deal.validates :instructions, presence: true
     deal.validates_associated :locations
     deal.validates_associated :deal_images
-    deal.validates_with StartTimeValidator
+    deal.validates_with StartTimeValidator, unless: :deal_processing?
     deal.validates_with ExpireTimeValidator
     deal.validates_with ImageValidator
     deal.validates_with LocationValidator
@@ -64,17 +65,21 @@ class Deal < ActiveRecord::Base
   scope :live, -> (time = Time.current){ published.where("start_time <= ?", time).where("? <= expire_time ", time) }
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
   scope :search, ->(keyword) { published.includes(:locations).where("lower(title) LIKE ? OR lower(locations.city) LIKE ?","%#{keyword.downcase}%", "%#{keyword.downcase}%" ).references(:locations)}
+  scope :not_processed, -> { where.not(processed: true) }
+  scope :for_coupon_processing, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) >= deals.min_qty") }
+  scope :for_refund_processing, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) < deals.min_qty") }
 
   belongs_to :category
   belongs_to :merchant
   has_many :locations, dependent: :destroy, validate: false
   has_many :deal_images, dependent: :destroy, validate: false
   has_many :orders, dependent: :restrict_with_error
+  has_many :coupons, through: :orders
 
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
-  before_validation :check_if_deal_can_be_updated?, if: ("publishable?")
+  before_validation :check_if_deal_can_be_updated?, if: ("publishable?"), unless: :deal_processing?
 
   def publish
     self.publishable = true
@@ -112,6 +117,12 @@ class Deal < ActiveRecord::Base
   end
 
   private
+
+  def deal_processing?
+    if changes
+      processed_was == false && processed == true
+    end
+  end
 
   def check_if_deal_can_be_updated?
     if expired?

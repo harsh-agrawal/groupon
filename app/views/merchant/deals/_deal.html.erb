@@ -1,12 +1,12 @@
 <div class = "col-sm-6 col-md-3 deal_box">
    <div class = "thumbnail deal_thumbnail">
-      <%= link_to deal_path(deal) do %>
+      <%= link_to merchant_deal_path(deal) do %>
       <%=image_tag deal.deal_images.first.image.url(:thumb), class: "img-responsive", alt: "deal.deal_images.first.image_file_name" %>
       <%end %>
    </div>
    
    <div class = "caption deal_caption">
-      <h4><b><%= link_to deal.title, deal_path(deal) %></b></h4>
+      <h4><b><%= deal.title %></b></h4>
       <p><%= truncate(strip_tags(deal.description), length: 100)%></p>
    </div>
    <p>

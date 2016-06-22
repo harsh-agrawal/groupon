@@ -13,8 +13,13 @@ class DealsController < ApplicationController
     @deals = Deal.search(@keyword).paginate(page: params[:page])
   end
 
+  #FIXME_AB: refresh
+  def refresh
+    @deal = Deal.published.find_by(id: params[:id])
+  end
+
   def show
-    @deal = Deal.published.find_by_id(params[:id])
+    @deal = Deal.published.find_by(id: params[:id])
     if @deal.nil?
       redirect_to deals_path, alert: "No such Deal exists."
     end

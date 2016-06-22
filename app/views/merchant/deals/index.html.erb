@@ -1,0 +1,10 @@
+<div class="page-header">
+<h2> Deals by the merchant <%= current_merchant.name %> </h2>
+</div>  
+<hr>
+<div class = "row">
+  <%= render @deals %>
+</div>
+<div class="page-footer col-md-offset-5">
+<%= will_paginate @deals %>
+</div>

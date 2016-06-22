@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   get '/activation/:token', to: 'users#account_activation', as: 'account_activation'
   get '/password_reset/:token', to: 'password_resets#new', as: 'reset_password'
+  get '/merchant', to: 'merchant/coupons#new'
   resource :password_reset, only: [:create]
   resource :sessions, only: [:new, :create, :destroy]
+  resource :merchant_sessions, only: [:new, :create, :destroy]
   resource :password_request, only: [:new, :create]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -18,6 +20,9 @@ Rails.application.routes.draw do
     collection do
       get 'search'
       get 'past'
+    end
+    member do
+      get 'refresh'
     end
     resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
@@ -36,6 +41,15 @@ Rails.application.routes.draw do
 
   get 'admin' => 'admin#index'
 
+  namespace :merchant do
+    resources :coupons, only: [:new] do
+      collection do
+        post 'redeem'
+      end
+    end
+    resources :deals, only: [:index, :show]
+  end
+
   namespace :admin do
     resources :deals do
       member do
@@ -48,6 +62,7 @@ Rails.application.routes.draw do
   resources :orders do
     resources :charges, only: [:create]
   end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   # Example of named route that can be invoked with purchase_url(id: product.id)

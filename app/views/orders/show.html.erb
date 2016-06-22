@@ -16,11 +16,6 @@
                 <td class="text-center"><strong>Deal Quantity</strong></td>
                 <td><strong>Order Status</strong></td>
                 <td><strong>Order Placed At</strong></td>
-                <td><strong>Card Brand</strong></td>
-                <td><strong>Card Exp. Month</strong></td>
-                <td><strong>Card Exp. Year</strong></td>
-                <td><strong>Last Four Digits</strong></td>
-
                 <td class="text-right"><strong>Total</strong></td>
               </tr>
             </thead>
@@ -35,17 +30,9 @@
                 <td class="text-center"><%= @order.quantity %></td>
                 <td class="text-center"><%= @order.status %></td>
                 <td class="text-center"><%= @order.placed_at.to_s(:detailed) %></td>
-                <td class="text-center"><%= @order.payment_transactions.first.card_brand %></td>
-                <td class="text-center"><%= @order.payment_transactions.first.exp_month %></td>
-                <td class="text-center"><%= @order.payment_transactions.first.exp_year %></td>
-                <td class="text-center"><%= @order.payment_transactions.first.last_four_digits %></td>
                 <td class="text-right"><%= number_to_currency(@order.calculate_total_price , unit: "$")%></td>
               </tr>
               <tr>
-                <td class="highrow"></td>
-                <td class="highrow"></td>
-                <td class="highrow"></td>
-                <td class="highrow"></td>
                 <td class="highrow"></td>
                 <td class="highrow"></td>
                 <td class="highrow"></td>
@@ -59,6 +46,45 @@
           </table>
         </div>
       </div>
+      <div class="panel-heading">
+        <h3 class="text-center"><strong> Transaction Details </strong></h3>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 demo">
+          <div class="info-block">
+            <b>Order Transaction</b>
+            <% order_transaction = @order.payment_transactions.order(created_at: :asc).first %>
+            <ul>
+              <li><strong>Amount</strong> : <%= number_to_currency(order_transaction.order.calculate_total_price , unit: "$") %></li>
+              <li><strong>Card Brand</strong> : <%= order_transaction.card_brand %> </li>
+              <li><strong>Card Exp. Month</strong>  : <%= order_transaction.exp_month %> </li>
+              <li><strong>Card Exp. Year</strong> : <%= order_transaction.exp_year %> </li>
+              <li><strong>Last Four Digits</strong> : <%= order_transaction.last_four_digits %> </li>
+            </ul>
+          </div>
+        </div>
+        
+        <% refund_transaction = @order.payment_transactions.order(created_at: :asc).second %>
+        <% if refund_transaction %>
+        <div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 demo">
+          <div class="info-block">
+            <b>Refund Transaction</b>
+            <ul>
+              <li><strong>Amount</strong> : <%= number_to_currency(refund_transaction.order.calculate_total_price , unit: "$") %></li>
+            </ul>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <% if @order.coupons.any? %>
+      <div class="panel-heading">
+        <h3 class="text-center"><strong> Coupons </strong></h3>
+      </div>
+      <ul>
+        <%= render @order.coupons %>
+      </ul>
+      <% end %>
     </div>
   </div>
 </div>

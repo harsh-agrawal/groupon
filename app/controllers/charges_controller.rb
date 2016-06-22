@@ -1,7 +1,7 @@
 class ChargesController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
-  #FIXME_AB: check logged in user
+  before_action :authenticate
   before_action :set_order, only: [:create]
 
   def create
