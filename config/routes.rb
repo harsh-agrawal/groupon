@@ -21,6 +21,9 @@ Rails.application.routes.draw do
       get 'search'
       get 'past'
     end
+    member do
+      get 'update_count'
+    end
     resources :orders, only: [:new, :index, :edit, :update, :destroy, :show]
   end
 

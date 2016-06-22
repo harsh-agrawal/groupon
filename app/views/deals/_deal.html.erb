@@ -6,7 +6,7 @@
    </div>
    
    <div class = "caption deal_caption">
-      <h4><b><%= deal.title %></b></h4>
+      <h4><b><%= link_to deal.title, deal_path(deal) %></b></h4>
       <p><%= truncate(strip_tags(deal.description), length: 100)%></p>
    </div>
    <p>

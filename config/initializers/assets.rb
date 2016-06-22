@@ -17,4 +17,4 @@ Rails.application.config.assets.precompile += %w( cycle.js )
 Rails.application.config.assets.precompile += %w( slideshow.js )
 Rails.application.config.assets.precompile += %w( merchant/merchant.css )
 Rails.application.config.assets.precompile += %w( merchant/merchant.js )
-
+Rails.application.config.assets.precompile += %w( polling.js )
