@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621065205) do
+ActiveRecord::Schema.define(version: 20160622130332) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 20160621065205) do
     t.datetime "forgot_password_expire_at"
     t.datetime "created_at",                                               null: false
     t.datetime "updated_at",                                               null: false
+    t.string   "authentication_token",         limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

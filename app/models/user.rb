@@ -66,6 +66,7 @@ class User < ActiveRecord::Base
     self.verified_at = Time.current
     self.verification_token = nil
     self.verification_token_expire_at = nil
+    generate_token(:authentication_token)
     save!
   end
 
@@ -88,6 +89,16 @@ class User < ActiveRecord::Base
 
   def qty_can_be_purchased(deal)
     deal.max_qty_per_customer - orders.by_deal(deal.id).placed.sum(:quantity)
+  end
+
+  def generate_token(token_for)
+    loop do
+      token_value = random_token
+      if !(User.exists?(token_for => token_value))
+        self[token_for] = token_value
+        break
+      end
+    end
   end
 
   private
@@ -113,14 +124,6 @@ class User < ActiveRecord::Base
     UserNotifier.verification_mail(self).deliver_now
   end
 
-  def generate_token(token_for)
-    loop do
-      token_value = random_token
-      if !(User.exists?(token_for => token_value))
-        self[token_for] = token_value
-        break
-      end
-    end
-  end
+  
 
 end

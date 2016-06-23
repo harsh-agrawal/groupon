@@ -41,6 +41,10 @@ Rails.application.routes.draw do
 
   get 'admin' => 'admin#index'
 
+  namespace :api, defaults: { format: :json } do
+    get '/orders/:token', to: 'orders#show'   
+  end
+
   namespace :merchant do
     resources :coupons, only: [:new] do
       collection do

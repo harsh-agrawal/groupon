@@ -10,6 +10,7 @@ namespace :deals do
             coupon = order.coupons.build
           end
           order.status = 'processed'
+          debugger
           order.save!
         end
         deal.processed = true

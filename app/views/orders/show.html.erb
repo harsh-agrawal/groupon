@@ -51,27 +51,29 @@
       </div>
       <br>
       <div class="row">
-        <div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 demo">
+        <div class="col-12 col-lg-6 col-md-3 col-sm-3 col-xs-12">
           <div class="info-block">
             <b>Order Transaction</b>
             <% order_transaction = @order.payment_transactions.order(created_at: :asc).first %>
             <ul>
-              <li><strong>Amount</strong> : <%= number_to_currency(order_transaction.order.calculate_total_price , unit: "$") %></li>
+              <li><strong>Amount</strong> : <%= number_to_currency(order_transaction.total_price_in_dollars , unit: "$") %></li>
               <li><strong>Card Brand</strong> : <%= order_transaction.card_brand %> </li>
               <li><strong>Card Exp. Month</strong>  : <%= order_transaction.exp_month %> </li>
               <li><strong>Card Exp. Year</strong> : <%= order_transaction.exp_year %> </li>
               <li><strong>Last Four Digits</strong> : <%= order_transaction.last_four_digits %> </li>
+              <li><strong>Ordered At </strong>  : <%= order_transaction.created_at.to_s(:detailed) %></li>
             </ul>
           </div>
         </div>
         
         <% refund_transaction = @order.payment_transactions.order(created_at: :asc).second %>
         <% if refund_transaction %>
-        <div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 demo">
+        <div class="col-12 col-lg-6 col-md-3 col-sm-3 col-xs-12 demo">
           <div class="info-block">
             <b>Refund Transaction</b>
             <ul>
-              <li><strong>Amount</strong> : <%= number_to_currency(refund_transaction.order.calculate_total_price , unit: "$") %></li>
+              <li><strong>Amount</strong> : <%= number_to_currency(refund_transaction.total_price_in_dollars , unit: "$") %></li>
+              <li><strong>Refunded At </strong>  : <%= refund_transaction.created_at.to_s(:detailed) %></li>
             </ul>
           </div>
         </div>

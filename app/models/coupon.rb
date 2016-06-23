@@ -22,12 +22,13 @@
 class Coupon < ActiveRecord::Base
   belongs_to :order
 
-  before_create :generate_token
   validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :order, presence: true
 
   scope :redeemed, -> { where.not(redeemed_at: nil) }
 
+  before_validation :generate_token, on: :create
+  
   def random_token
     SecureRandom.hex(5)
   end

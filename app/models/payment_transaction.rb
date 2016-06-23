@@ -35,4 +35,8 @@
 class PaymentTransaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :order
+
+  def total_price_in_dollars
+    (amount / 100).to_i
+  end
 end
