@@ -9,7 +9,7 @@ class Api::OrdersController < ApplicationController
   def valid_token
     @user = User.verified.find_by(authentication_token: params[:token])
     if @user.nil?
-      render :json => { :error => "Invalid user." }
+      render json: { error: "Invalid user." }
     end
   end
 
