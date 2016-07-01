@@ -16,6 +16,7 @@
 #  forgot_password_expire_at    :datetime
 #  created_at                   :datetime         not null
 #  updated_at                   :datetime         not null
+#  authentication_token         :string(255)
 #
 # Indexes
 #

@@ -2,15 +2,16 @@
 #
 # Table name: orders
 #
-#  id         :integer          not null, primary key
-#  user_id    :integer          not null
-#  deal_id    :integer          not null
-#  quantity   :integer          default(1), not null
-#  status     :integer          default(0)
-#  placed_at  :datetime
-#  price      :integer          not null
-#  created_at :datetime
-#  updated_at :datetime
+#  id           :integer          not null, primary key
+#  user_id      :integer          not null
+#  deal_id      :integer          not null
+#  quantity     :integer          default(1), not null
+#  status       :integer          default(0)
+#  placed_at    :datetime
+#  price        :integer          not null
+#  created_at   :datetime
+#  updated_at   :datetime
+#  processed_at :datetime
 #
 # Indexes
 #
@@ -44,9 +45,9 @@ class Order < ActiveRecord::Base
 
   scope :paid, -> { where( "status = ?", Order.statuses[:paid] ) }
   scope :pending, -> { where( "status = ?", Order.statuses[:pending] ) }
-  #FIXME_AB: use in. where(status: [Order.statuses[:paid], Order.statuses["processed"], Order.statuses[:refunded]])
   scope :placed, -> { where(status: [Order.statuses[:paid], Order.statuses["processed"], Order.statuses[:refunded]]) }
   scope :by_deal, -> (deal_id) { where("deal_id = ?", deal_id ) }
+  scope :by_time, -> (from, to) { where(processed_at: from..to) }
 
   before_save :update_sold_quantity, if: :deal_bought
   before_save :set_order_placed_at, if: :deal_bought

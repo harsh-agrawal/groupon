@@ -4,8 +4,27 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+valid_location:
+  address: xyz
+  city: abc
+  state: delhi
+  country: india
+  deal_id: 2
+
+<% 15.times do |n| %>
+valid_location_<%= n+1 %>:
+  address: xyz
+  city: abc
+  state: delhi
+  country: india
+  deal_id: <%= n+3 %>
+<% end %>
+
+<% 5.times do |n| %>
+valid_location_<%= n+16 %>:
+  address: xyz
+  city: abc
+  state: delhi
+  country: india
+  deal_id: 2
+<% end %>

@@ -34,6 +34,10 @@ gem "paperclip", "~> 5.0.0.beta1"
 gem 'will_paginate', '~> 3.1.0'
 #stripe
 gem 'stripe'
+
+group :test do
+  gem 'simplecov', :require => false
+end
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -53,4 +57,3 @@ group :development do
   gem 'spring'
   gem "annotate"
 end
-

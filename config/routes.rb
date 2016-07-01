@@ -61,6 +61,11 @@ Rails.application.routes.draw do
         get 'unpublish'
       end
     end
+    resources :reports, only: [] do
+      collection do
+        get 'merchants'
+      end
+    end
   end
 
   resources :orders do

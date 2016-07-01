@@ -1,0 +1,5 @@
+<tr>
+  <td class="text-center"><%= merchant.id %></td>
+  <td class="text-center"><strong><%= merchant.name %></strong></td>
+  <td class="text-center"><strong><%= number_to_currency(merchant.order_sum(@start_time, @end_time), unit: '$')  %></strong></td>
+</tr>

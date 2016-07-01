@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160622130332) do
+ActiveRecord::Schema.define(version: 20160623133637) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
@@ -90,14 +90,15 @@ ActiveRecord::Schema.define(version: 20160622130332) do
   add_index "merchants", ["email"], name: "index_merchants_on_email", unique: true, using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4,             null: false
-    t.integer  "deal_id",    limit: 4,             null: false
-    t.integer  "quantity",   limit: 4, default: 1, null: false
-    t.integer  "status",     limit: 4, default: 0
+    t.integer  "user_id",      limit: 4,             null: false
+    t.integer  "deal_id",      limit: 4,             null: false
+    t.integer  "quantity",     limit: 4, default: 1, null: false
+    t.integer  "status",       limit: 4, default: 0
     t.datetime "placed_at"
-    t.integer  "price",      limit: 4,             null: false
+    t.integer  "price",        limit: 4,             null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "processed_at"
   end
 
   add_index "orders", ["deal_id"], name: "index_orders_on_deal_id", using: :btree

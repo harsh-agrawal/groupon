@@ -10,6 +10,7 @@ namespace :deals do
             coupon = order.coupons.build
           end
           order.status = 'processed'
+          order.processed_at = Time.current
           debugger
           order.save!
         end
@@ -24,6 +25,7 @@ namespace :deals do
         deal.orders.each do |order|
           Rails.logger.info "Refunding for Order##{order.id}"
           order.status = 'refunded'
+          order.processed_at = Time.current
           order.save!
         end
         deal.processed = true

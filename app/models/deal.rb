@@ -46,6 +46,7 @@ class Deal < ActiveRecord::Base
       too_short: "must have at least 10 words"
     }
     deal.validates :min_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+    deal.validates :sold_quantity, numericality: { only_integer: true, less_than_or_equal_to: ->(deal) { deal.max_qty } }, if: :max_qty?
     deal.validates :start_time, presence: true
     deal.validates :expire_time, presence: true
     deal.validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
@@ -59,15 +60,16 @@ class Deal < ActiveRecord::Base
   end
   validates :max_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: ->(deal) { deal.min_qty } }, if: ("publishable? && min_qty?")
   validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
-  validates :sold_quantity, numericality: { only_integer: true, less_than_or_equal_to: ->(deal) { deal.max_qty } }
-
+  
   scope :published, -> { where(publishable: true) }
   scope :live, -> (time = Time.current){ published.where("start_time <= ?", time).where("? <= expire_time ", time) }
   scope :past, -> (time = Time.current){ published.where("? > expire_time", time) }
   scope :search, ->(keyword) { published.includes(:locations).where("lower(title) LIKE ? OR lower(locations.city) LIKE ?","%#{keyword.downcase}%", "%#{keyword.downcase}%" ).references(:locations)}
+  scope :processed, -> { where(processed: true ) }
   scope :not_processed, -> { where.not(processed: true) }
   scope :for_coupon_processing, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) >= deals.min_qty") }
   scope :for_refund_processing, -> { past.not_processed.joins(:orders).group("orders.deal_id").having("sum(orders.quantity) < deals.min_qty") }
+  scope :successfully_expired, -> { past.processed.where('min_qty <= sold_quantity') }
 
   belongs_to :category
   belongs_to :merchant
@@ -79,7 +81,7 @@ class Deal < ActiveRecord::Base
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
-  before_validation :check_if_deal_can_be_updated?, if: ("publishable?"), unless: :deal_processing?
+  before_validation :check_if_deal_can_be_updated?, if: "publishable?", unless: :deal_processing?
 
   def publish
     self.publishable = true
@@ -88,15 +90,15 @@ class Deal < ActiveRecord::Base
 
   def unpublish
     self.publishable = false
-    save
+    save  
   end
 
   def live?
-    Time.current.between?(start_time, expire_time)
+    start_time && Time.current.between?(start_time, expire_time)
   end
 
   def expired?
-    expire_time < Time.current
+    expire_time && expire_time < Time.current
   end
 
   def sold_out?

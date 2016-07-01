@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row col-md-12 panel panel-default">
+    <div class="panel-heading">
+      <h3 class="text-center"><strong> Merchants </strong></h3>
+      <%= form_tag("", method: "get") do %>
+      From : <%= select_datetime(Time.current, prefix: :start_time) %>
+      To : <%= select_datetime(Time.current, prefix: :end_time)%>
+      </div>
+      <%= submit_tag("Submit") %>
+      <% end %>
+    </div>
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+          <thead>
+            <tr>
+              <td class="text-center">#</td>
+              <td class="text-center"><strong>Merchant Name</strong></td>
+              <td class="text-center"><strong>Total Revenue</strong></td>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render partial: 'admin/reports/merchant', collection: @merchants %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

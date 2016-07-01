@@ -4,8 +4,90 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+valid_deal:
+  id: 1
+  title: Deal test
+  category_id: 1 
+  merchant_id: 1
+
+publishable_deal:
+  id: 2
+  title: Deal Publishable
+  category_id: 1
+  merchant_id: 1
+  description: This is a sample description for the test deal .
+  instructions: Instructions for test deal. 
+  price: 50
+  min_qty: 3 
+  max_qty: 10
+  max_qty_per_customer: 1
+  sold_quantity: 2
+  start_time: <%= (Time.current + 1.day).to_s(:db) %>
+  expire_time: <%= (Time.current + 2.days).to_s(:db) %>
+
+<% 10.times do |n| %>
+publishable_deal_<%= n+3 %>:
+  id: <%= n+3 %>
+  title: Deal Publishable
+  category_id: 1
+  merchant_id: 1
+  description: This is a sample description for the test deal .
+  instructions: Instructions for test deal. 
+  price: 50
+  min_qty: 3 
+  max_qty: 10
+  max_qty_per_customer: 1
+  start_time: <%= (Time.current - 1.day).to_s(:db) %>
+  expire_time: <%= (Time.current + 3.days).to_s(:db) %>
+  publishable: true
+  processed: true
+<% end %>
+
+<% 5.times do |n| %>
+publishable_deal_<%= n+13 %>:
+  id: <%= n+13 %>
+  title: test
+  category_id: 1
+  merchant_id: 1
+  description: This is a sample description for the test deal .
+  instructions: Instructions for test deal. 
+  price: 50
+  min_qty: 3 
+  max_qty: 10
+  max_qty_per_customer: 1
+  start_time: <%= (Time.current - 1.day).to_s(:db) %>
+  expire_time: <%= (Time.current + 3.days).to_s(:db) %>
+  publishable: true
+<% end %>
+
+live_deal:
+  id: 18
+  title: Deal Publishable
+  category_id: 1
+  merchant_id: 1
+  description: This is a sample description for the test deal .
+  instructions: Instructions for test deal. 
+  price: 50
+  min_qty: 3 
+  max_qty: 10
+  max_qty_per_customer: 1
+  sold_quantity: 10
+  start_time: <%= (Time.current - 1.day).to_s(:db) %>
+  expire_time: <%= (Time.current + 3.days).to_s(:db) %>
+  publishable: true
+
+expired_deal:
+  id: 19
+  title: Deal Publishable
+  category_id: 1
+  merchant_id: 1
+  description: This is a sample description for the test deal .
+  instructions: Instructions for test deal. 
+  price: 50
+  min_qty: 3 
+  max_qty: 10
+  max_qty_per_customer: 1
+  start_time: 0000-00-00 00:00:00
+  expire_time: <%= (Time.current).to_s(:db) %>
+  publishable: true
+
