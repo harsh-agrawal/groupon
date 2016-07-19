@@ -9,3 +9,9 @@
 # #
 # two: {}
 # #  column: value
+valid_user:
+  id: 1
+  first_name: lmn
+  last_name: pqr
+  password_digest: 123456
+  email: stu@ghi.com

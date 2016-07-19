@@ -4,3 +4,16 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
+valid_coupon:
+  id: 1
+  order_id: 1
+  code: 53bcfba447
+
+<% 5.times do |n| %>
+valid_coupon_<%= n+1 %>:
+  id: <%= n+2 %>
+  order_id: 1
+  code: 53bcfbh44<%= n+5 %>
+  redeemed_at: <%= (Time.current + 2.days).to_s(:db) %>
+<% end %>
+

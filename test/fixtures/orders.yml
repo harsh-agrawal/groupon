@@ -10,12 +10,12 @@
 # two: {}
 # #  column: value
 
-# valid_order: 
-#   id:
-#   user_id: 
-#   deal_id: 19
-#   quantity: 1
-#   status: 2
-#   placed_at: <%= (Time.current - 1.day).to_s(:db) %> 
-#   price: 50
-#   processed_at: <%= (Time.current).to_s(:db) %>
+valid_order: 
+  id: 1
+  user_id: 1
+  deal_id: 19
+  quantity: 1
+  status: 2
+  placed_at: <%= (Time.current - 1.day).to_s(:db) %> 
+  price: 50
+  processed_at: <%= (Time.current).to_s(:db) %>

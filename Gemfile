@@ -38,6 +38,9 @@ gem 'stripe'
 group :test do
   gem 'simplecov', :require => false
 end
+
+gem 'rspec'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

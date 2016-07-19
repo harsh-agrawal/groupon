@@ -27,6 +27,7 @@ class DealsControllerTest < ActionController::TestCase
   test "should get refresh" do
     get(:refresh, {'id' => 8, format: :json})
     assert_response :success
+    assert_template :refresh
     assert_not_nil( assigns(:deal), "deal exists")
     assert assigns(:deal).publishable?, 'Deal should be publishable'
   end
