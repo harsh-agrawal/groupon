@@ -37,10 +37,15 @@ gem 'stripe'
 
 group :test do
   gem 'simplecov', :require => false
+  gem 'shoulda'
+  gem 'shoulda-callback-matchers'
+  gem 'faker'
+  gem 'database_cleaner'
 end
 
-gem 'rspec'
+gem 'rspec-rails'
 
+gem 'factory_girl_rails'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

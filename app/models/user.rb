@@ -43,8 +43,8 @@ class User < ActiveRecord::Base
   has_many :payment_transactions, dependent: :restrict_with_error
 
   before_validation :set_password_required, on: :create
-  before_create :set_and_generate_verification_token, if: '!admin'
-  after_commit :send_verification_mail, on: :create, if: '!admin'
+  before_create :set_and_generate_verification_token, unless: :admin?
+  after_commit :send_verification_mail, on: :create, unless: :admin?
 
   def valid_verification_token?
     Time.current <= verification_token_expire_at
