@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe DealsController, type: :controller do
 
-  let(:deal) { FactoryGirl.create(:deal) }
+  let(:deal) { FactoryGirl.create(:published_deal) }
 
   describe 'GET#index' do
     def send_request

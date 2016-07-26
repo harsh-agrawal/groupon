@@ -15,4 +15,14 @@ FactoryGirl.define do
     end
   end
 
+  factory :published_deal, parent: :deal do
+    description 'This is a sample description for the test deal .'
+    instructions 'Instructions for test deal.'
+    min_qty 3
+    sold_quantity 2
+    start_time Time.current - 1.day
+    expire_time Time.current + 2.days
+    publishable true
+  end
+
 end
