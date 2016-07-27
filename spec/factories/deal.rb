@@ -20,9 +20,16 @@ FactoryGirl.define do
     instructions 'Instructions for test deal.'
     min_qty 3
     sold_quantity 2
-    start_time Time.current - 1.day
+    start_time Time.current + 1.day
     expire_time Time.current + 2.days
+    after(:build) do |deal|
+      deal.locations << create(:location)
+    end
+    after(:build) do |deal|
+      deal.deal_images << create(:deal_image)
+    end
     publishable true
+
   end
 
 end
