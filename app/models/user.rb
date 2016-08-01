@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
 
   has_many :orders, dependent: :restrict_with_error
   has_many :payment_transactions, dependent: :restrict_with_error
+  has_many :subscriptions, dependent: :nullify
 
   before_validation :set_password_required, on: :create
   before_create :set_and_generate_verification_token, unless: :admin?

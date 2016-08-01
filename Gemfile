@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+#FIX_ME_PG:- lock gem versions, remove commented lines, group the gems to its environment acc. to the usage
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
@@ -18,6 +19,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
+gem 'rake', '~> 11.2.2'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
@@ -25,7 +27,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 
 # Nested form
-gem "nested_form"
+gem 'nested_form', '~> 0.3.2'
 
 #paperclip
 gem "paperclip", "~> 5.0.0.beta1"
@@ -33,7 +35,13 @@ gem "paperclip", "~> 5.0.0.beta1"
 #pagination
 gem 'will_paginate', '~> 3.1.0'
 #stripe
-gem 'stripe'
+gem 'stripe', '~> 1.43.0'
+
+gem 'serviceworker-rails', '~> 0.3.1'
+
+gem 'webpush', '~> 0.2.3'
+
+gem 'whenever', require: false
 
 group :test do
   gem 'simplecov', :require => false

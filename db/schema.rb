@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160623133637) do
+ActiveRecord::Schema.define(version: 20160729103817) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160623133637) do
     t.integer  "sold_quantity",        limit: 4,                             default: 0
     t.integer  "lock_version",         limit: 4,                             default: 0
     t.boolean  "processed",                                                  default: false
+    t.boolean  "notified",                                                   default: false
   end
 
   add_index "deals", ["category_id"], name: "index_deals_on_category_id", using: :btree
@@ -126,6 +127,17 @@ ActiveRecord::Schema.define(version: 20160623133637) do
 
   add_index "payment_transactions", ["order_id"], name: "index_payment_transactions_on_order_id", using: :btree
   add_index "payment_transactions", ["user_id"], name: "index_payment_transactions_on_user_id", using: :btree
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.text     "endpoint",   limit: 65535
+    t.string   "auth",       limit: 255
+    t.string   "payload",    limit: 255
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                   limit: 255,                 null: false

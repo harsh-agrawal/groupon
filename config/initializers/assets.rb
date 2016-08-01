@@ -18,3 +18,10 @@ Rails.application.config.assets.precompile += %w( slideshow.js )
 Rails.application.config.assets.precompile += %w( merchant/merchant.css )
 Rails.application.config.assets.precompile += %w( merchant/merchant.js )
 Rails.application.config.assets.precompile += %w( polling.js )
+
+
+Rails.application.configure do
+  config.assets.precompile += %w[
+    serviceworker.js
+  ]
+end
