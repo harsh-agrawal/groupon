@@ -1,0 +1,8 @@
+{
+  "name": "Push Simple - Service Worker Rails Sandbox",
+  "short_name": "push-simple",
+  "start_url": "./push-simple/",
+  "display": "standalone",
+  "gcm_sender_id": "302107187994",
+  "gcm_user_visible_only": true
+}

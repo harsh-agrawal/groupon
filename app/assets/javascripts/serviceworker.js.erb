@@ -1,0 +1,19 @@
+function onPush(event) {
+  var json = event.data.json();
+  event.waitUntil(
+    self.registration.showNotification(json.title, {
+      body: json.body,
+      icon: json.icon,
+      data: {
+        url: json.url
+      }
+    })
+  );
+}
+
+self.addEventListener("push", onPush);
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  clients.openWindow(event.notification.data.url);
+}, false);    

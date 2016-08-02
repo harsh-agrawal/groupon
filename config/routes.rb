@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   get '/activation/:token', to: 'users#account_activation', as: 'account_activation'
   get '/password_reset/:token', to: 'password_resets#new', as: 'reset_password'
   get '/merchant', to: 'merchant/coupons#new'
+
+  post "/subscribe" => "subscriptions#create"
+
   resource :password_reset, only: [:create]
   resource :sessions, only: [:new, :create, :destroy]
   resource :merchant_sessions, only: [:new, :create, :destroy]
@@ -42,7 +45,7 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#index'
 
   namespace :api, defaults: { format: :json } do
-    get '/orders/:token', to: 'orders#show'   
+    get '/orders/:token', to: 'orders#show'
   end
 
   namespace :merchant do

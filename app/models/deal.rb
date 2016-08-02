@@ -20,6 +20,7 @@
 #  sold_quantity        :integer          default(0)
 #  lock_version         :integer          default(0)
 #  processed            :boolean          default(FALSE)
+#  notified             :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -53,7 +54,7 @@ class Deal < ActiveRecord::Base
     deal.validates :instructions, presence: true
     deal.validates_associated :locations
     deal.validates_associated :deal_images
-    deal.validates_with StartTimeValidator, unless: :deal_processing?
+    deal.validates_with StartTimeValidator, unless: :deal_processing?, if: "!deal_was_notified?"
     deal.validates_with ExpireTimeValidator
     deal.validates_with ImageValidator
     deal.validates_with LocationValidator
@@ -81,7 +82,7 @@ class Deal < ActiveRecord::Base
   accepts_nested_attributes_for :deal_images, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :locations, allow_destroy: true, reject_if: :all_blank
 
-  before_validation :check_if_deal_can_be_updated?, if: "publishable?", unless: :deal_processing?
+  before_validation :check_if_deal_can_be_updated?, if: "publishable? && !deal_was_notified?", unless: :deal_processing?
 
   def publish
     self.publishable = true
@@ -123,6 +124,12 @@ class Deal < ActiveRecord::Base
   def deal_processing?
     if changes
       processed_was == false && processed == true
+    end
+  end
+
+  def deal_was_notified?
+    if changes
+      notified_was == false && notified == true
     end
   end
 
