@@ -1,75 +1,40 @@
 source 'https://rubygems.org'
 
-#FIX_ME_PG:- lock gem versions, remove commented lines, group the gems to its environment acc. to the usage
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+ruby '2.3.0'
 gem 'rails', '4.2.6'
-# Use mysql2 as the database for Active Record
-gem 'mysql2'
-# Use SCSS for stylesheets
+gem 'mysql2', '~> 0.4.4'
 gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jquery-rails', '~> 4.1.1'
 gem 'jbuilder', '~> 2.0'
 gem 'rake', '~> 11.2.2'
-# bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
-# Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
-
-# Nested form
 gem 'nested_form', '~> 0.3.2'
-
-#paperclip
-gem "paperclip", "~> 5.0.0.beta1"
-
-#pagination
+gem 'paperclip', '~> 5.0.0.beta1'
 gem 'will_paginate', '~> 3.1.0'
-#stripe
 gem 'stripe', '~> 1.43.0'
-
 gem 'serviceworker-rails', '~> 0.3.1'
-
 gem 'webpush', '~> 0.2.3'
-
-gem 'whenever', require: false
+gem 'whenever', '~> 0.9.7', require: false
 
 group :test do
-  gem 'simplecov', :require => false
-  gem 'shoulda'
-  gem 'shoulda-callback-matchers'
-  gem 'faker'
-  gem 'database_cleaner'
+  gem 'simplecov', '~> 0.11.2', require: false
+  gem 'shoulda', '~> 3.5.0'
+  gem 'shoulda-callback-matchers', '~> 1.1.4'
+  gem 'faker', '~> 1.6.5'
+  gem 'database_cleaner', '~> 1.5.3'
+  gem 'rspec-rails', '~> 3.5.1'
+  gem 'factory_girl_rails', '~> 4.7.0'
 end
 
-gem 'rspec-rails'
-
-gem 'factory_girl_rails'
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  gem 'byebug', '~> 9.0.4'
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem "annotate"
+  gem 'spring', '~> 1.7.1'
+  gem 'annotate', '~> 2.7.1'
 end

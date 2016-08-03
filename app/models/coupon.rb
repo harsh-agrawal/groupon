@@ -45,8 +45,7 @@ class Coupon < ActiveRecord::Base
 
   def redeem
     return false if redeemed_at.present?
-    self.redeemed_at = Time.current
-    save
+    update(redeemed_at: Time.current)
   end
 
 

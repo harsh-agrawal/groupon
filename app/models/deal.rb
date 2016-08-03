@@ -34,6 +34,12 @@
 #
 
 class Deal < ActiveRecord::Base
+  DESCRIPTION_MIN_LENGTH = 10
+  MINIMUM_PRICE = 0.01
+  MINIMUM_MIN_QTY = 1
+  MINIMUM_MAX_QTY_PER_CUSTOMER = 1
+
+
   self.per_page = 10
 
   validates :title, presence: true
@@ -42,25 +48,25 @@ class Deal < ActiveRecord::Base
   with_options if: "publishable?" do |deal|
 
     deal.validates :description, length: {
-      minimum: 10,
+      minimum: DESCRIPTION_MIN_LENGTH,
       tokenizer: lambda { |str| str.split(/\s+/)},
-      too_short: "must have at least 10 words"
+      too_short: "must have at least #{ DESCRIPTION_MIN_LENGTH } words"
     }
-    deal.validates :min_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+    deal.validates :min_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: MINIMUM_MIN_QTY }
     deal.validates :sold_quantity, numericality: { only_integer: true, less_than_or_equal_to: ->(deal) { deal.max_qty } }, if: :max_qty?
     deal.validates :start_time, presence: true
     deal.validates :expire_time, presence: true
-    deal.validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
+    deal.validates :price, presence: true, numericality: { greater_than_or_equal_to: MINIMUM_PRICE }
     deal.validates :instructions, presence: true
     deal.validates_associated :locations
     deal.validates_associated :deal_images
-    deal.validates_with StartTimeValidator, unless: :deal_processing?, if: "!deal_was_notified?"
+    deal.validates_with StartTimeValidator, unless: ->(deal) { deal.deal_processing? || deal.deal_was_notified? }
     deal.validates_with ExpireTimeValidator
     deal.validates_with ImageValidator
     deal.validates_with LocationValidator
   end
   validates :max_qty, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: ->(deal) { deal.min_qty } }, if: ("publishable? && min_qty?")
-  validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
+  validates :max_qty_per_customer, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: MINIMUM_MAX_QTY_PER_CUSTOMER, less_than_or_equal_to: ->(deal) { deal.max_qty }}, if: ("publishable? && max_qty? ")
   
   scope :published, -> { where(publishable: true) }
   scope :live, -> (time = Time.current){ published.where("start_time <= ?", time).where("? <= expire_time ", time) }
@@ -85,13 +91,11 @@ class Deal < ActiveRecord::Base
   before_validation :check_if_deal_can_be_updated?, if: "publishable? && !deal_was_notified?", unless: :deal_processing?
 
   def publish
-    self.publishable = true
-    save
+    update(publishable: true)
   end
 
   def unpublish
-    self.publishable = false
-    save  
+    update(publishable: false)
   end
 
   def live?
@@ -119,8 +123,6 @@ class Deal < ActiveRecord::Base
     min_qty - sold_quantity
   end
 
-  private
-
   def deal_processing?
     if changes
       processed_was == false && processed == true
@@ -132,6 +134,8 @@ class Deal < ActiveRecord::Base
       notified_was == false && notified == true
     end
   end
+
+  private
 
   def check_if_deal_can_be_updated?
     if expired?

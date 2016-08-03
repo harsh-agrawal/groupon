@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: deal_images
+# Table name: index_deal_images_on_deal_id
 #
 #  id                 :integer          not null, primary key
 #  deal_id            :integer
@@ -21,7 +21,7 @@
 #
 
 class DealImage < ActiveRecord::Base
-  has_attached_file :image, styles: { medium: "764x369>", thumb: "150x150>" }
-  validates_attachment :image, presence: true, content_type: { content_type: ["image/jpeg", "image/gif", "image/png"] }
+  has_attached_file :image, styles: { medium: CONSTANTS['image_medium_size'], thumb: CONSTANTS['image_thumb_size'] }
+  validates_attachment :image, presence: true, content_type: { content_type: [ CONSTANTS['jpeg'], CONSTANTS['png'], CONSTANTS['gif'] ] }
   belongs_to :deal
 end

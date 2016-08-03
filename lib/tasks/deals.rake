@@ -11,7 +11,6 @@ namespace :deals do
           end
           order.status = 'processed'
           order.processed_at = Time.current
-          debugger
           order.save!
         end
         deal.processed = true

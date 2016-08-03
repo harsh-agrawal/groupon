@@ -88,7 +88,6 @@ RSpec.describe User, type: :model do
         it "dsiplay the available quantity of the deal" do
           factory_instance.save
           factory_instance_deal.save
-          debugger
           expect(factory_instance.qty_can_be_purchased(factory_instance_deal)).to eq(3)
         end
       end

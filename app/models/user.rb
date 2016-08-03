@@ -85,8 +85,7 @@ class User < ActiveRecord::Base
   end
 
   def clear_remember_token!
-    self.remember_token = nil
-    save!
+    update!(remember_token: nil)
   end
 
   def qty_can_be_purchased(deal)

@@ -48,11 +48,11 @@
       </div>
     <div  data-behaviour = 'unpublishable', class="<%= @deal.publishable ? 'show' : 'hidden' %> ">
 
-      <%= link_to 'Unpublish It', unpublish_admin_deal_path(@deal), data: { disable_with: :processing, behaviour: :unpublish }, remote: true, format: :json, class: "btn btn-danger"%>
+      <%= link_to 'Unpublish It', unpublish_admin_deal_path(@deal),method: :put, data: { disable_with: :processing, behaviour: :unpublish }, remote: true, format: :json, class: "btn btn-danger"%>
     </div>
     <div data-behaviour = 'publishable', class="<%= @deal.publishable ? 'hidden' : 'show' %> ">
 
-      <%= link_to 'Publish It', publish_admin_deal_path(@deal), data: { disable_with: :processing, behaviour: :publish } ,remote: true, format: :json, class: "btn btn-success" %>
+      <%= link_to 'Publish It', publish_admin_deal_path(@deal),method: :put, data: { disable_with: :processing, behaviour: :publish } ,remote: true, format: :json, class: "btn btn-success" %>
     </div>
     </div>
   </div>

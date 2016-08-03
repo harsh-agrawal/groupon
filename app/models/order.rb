@@ -82,8 +82,7 @@ class Order < ActiveRecord::Base
   def mark_paid(transaction_details)
     transaction = payment_transactions.build(transaction_details)
     transaction.user = user
-    self.status = "paid"
-    save
+    update(status: :paid)
   end
 
   def mark_refunded(transaction_details)

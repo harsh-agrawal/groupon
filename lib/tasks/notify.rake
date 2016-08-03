@@ -13,7 +13,8 @@ namespace :notify do
           webpush_params = { message: JSON.generate(message), endpoint: record.endpoint, p256dh: record.payload, auth: record.auth, url: "hello" }
           Webpush.payload_send webpush_params
         end
-        # deal.update(notified: true)
+        debugger
+        deal.update(notified: true)
       end
     end
   end

@@ -14,12 +14,6 @@ class CouponTest < ActiveSupport::TestCase
     assert_not coupon.save, "Saved the coupon without code"
   end
 
-  test "coupon code should not be case sensitive" do
-    # coupon = Coupon.new(order_id: 1, code: '53BCFBA447', redeemed_at: Time.current + 2.day)
-    # debugger
-
-  end
-
   test "check order association" do
     coupon = coupons(:valid_coupon)
     association = coupon.association(:order)
